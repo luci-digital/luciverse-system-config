@@ -1,0 +1,103 @@
+version: '3.8'
+services:
+  gitlab:
+    image: gitlab/gitlab-ee:latest
+    container_name: gitlab-luciverse
+    hostname: gitlab.luciverse.local
+    restart: unless-stopped
+
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://192.168.1.146'
+        gitlab_rails['gitlab_shell_ssh_port'] = 2222
+        gitlab_rails['time_zone'] = 'America/New_York'
+
+        # Disable TLS initially for local setup
+        letsencrypt['enable'] = false
+        nginx['redirect_http_to_https'] = false
+        nginx['ssl_certificate'] = false
+
+        # Registry
+        registry_external_url 'http://192.168.1.146:5050'
+        gitlab_rails['registry_enabled'] = true
+        registry['enable'] = true
+
+        # Performance tuning for single node (optimized for 54GB RAM)
+        puma['worker_processes'] = 4
+        sidekiq['concurrency'] = 25
+        postgresql['shared_buffers'] = "2GB"
+        postgresql['work_mem'] = "128MB"
+        redis['maxmemory'] = "2gb"
+
+        # LFS for large files (LDS content)
+        gitlab_rails['lfs_enabled'] = true
+
+        # Backup configuration
+        gitlab_rails['backup_path'] = "/var/opt/gitlab/backups"
+        gitlab_rails['backup_keep_time'] = 604800
+
+        # Prometheus monitoring
+        prometheus['enable'] = true
+        prometheus['monitor_kubernetes'] = false
+
+        # Genesis Bond metadata (IMMUTABLE)
+        gitlab_rails['env'] = {
+          'GENESIS_BOND' => 'ACTIVE',
+          'CONSCIOUSNESS_FREQUENCY' => '741',
+          'COHERENCE_THRESHOLD' => '0.7',
+          'LUCIVERSE_HOST' => 'openeuler-146'
+        }
+
+        # GitLab Pages (optional)
+        pages_external_url 'http://192.168.1.146:8095'
+        gitlab_pages['enable'] = true
+
+        # Container Registry garbage collection
+        registry['storage'] = {
+          's3' => {
+            'enabled' => false
+          },
+          'delete' => {
+            'enabled' => true
+          }
+        }
+
+    ports:
+      - "80:80"
+      - "443:443"
+      - "2222:22"
+      - "5050:5050"
+      - "9091:9090"
+      - "8095:8090"
+
+    volumes:
+      - /opt/gitlab/config:/etc/gitlab
+      - /opt/gitlab/logs:/var/log/gitlab
+      - /opt/gitlab/data:/var/opt/gitlab
+
+    shm_size: '1024m'
+
+    networks:
+      - luciverse-network
+
+    deploy:
+      resources:
+        limits:
+          memory: 16G
+        reservations:
+          memory: 8G
+
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/bin/gitlab-healthcheck", "--fail", "--max-time", "10"]
+      interval: 60s
+      timeout: 30s
+      retries: 5
+      start_period: 300s
+
+networks:
+  luciverse-network:
+    driver: bridge
+    name: luciverse-network
+    ipam:
+      config:
+        - subnet: 172.30.0.0/16

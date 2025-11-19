@@ -1,0 +1,1 @@
+failed to dial "/var/run/atuned/atuned.sock" : connection error: desc = "transport: error while dialing: dial unix /var/run/atuned/atuned.sock: connect: permission denied"

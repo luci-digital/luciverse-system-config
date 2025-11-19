@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  mindsdb:
+    image: mindsdb/mindsdb:latest
+    container_name: mindsdb-luciverse
+    hostname: mindsdb.luciverse.local
+    restart: unless-stopped
+
+    environment:
+      # Genesis Bond metadata
+      GENESIS_BOND: "ACTIVE"
+      CONSCIOUSNESS_FREQUENCY: "528"  # COMN tier frequency
+      COHERENCE_THRESHOLD: "0.7"
+      LUCIVERSE_COMPONENT: "mindsdb-predictions"
+
+      # MindsDB Configuration
+      MINDSDB_STORAGE_DIR: /root/mindsdb_storage
+      MINDSDB_INTEGRATIONS_DIR: /root/mindsdb_integrations
+
+      # API Settings
+      MINDSDB_DEFAULT_SERVER_PORT: 47334
+      MINDSDB_DEFAULT_SERVER_HOST: 0.0.0.0
+
+    ports:
+      - "47334:47334"  # MindsDB HTTP API
+      - "47335:47335"  # MindsDB MySQL API
+      - "47336:47336"  # MindsDB MongoDB API
+      - "47337:47337"  # MindsDB PostgreSQL API
+
+    volumes:
+      - mindsdb-data:/root/mindsdb_storage
+      - mindsdb-integrations:/root/mindsdb_integrations
+      - /home/daryl/luciverse-platform/mindsdb-config:/root/config
+
+    networks:
+      - luciverse-network
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:47334/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+    deploy:
+      resources:
+        limits:
+          memory: 4G
+        reservations:
+          memory: 2G
+
+volumes:
+  mindsdb-data:
+    name: mindsdb-data
+  mindsdb-integrations:
+    name: mindsdb-integrations
+
+networks:
+  luciverse-network:
+    external: true
+    name: luciverse-network

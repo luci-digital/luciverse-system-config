@@ -1,0 +1,56 @@
+# Secrets and credentials
+*.token
+*.key
+*.pem
+*.crt
+*.csr
+*password*
+*secret*
+
+# Logs
+*.log
+*.log.*
+
+# Temporary files
+*.tmp
+*.swp
+*.bak
+*~
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Node
+node_modules/
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+.env
+docker-compose.override.yml
+
+# Data directories (keep structure, ignore content)
+data/
+storage/
+backups/
+*.db
+*.sqlite
+
+# Genesis Bond validation (keep scripts, ignore outputs)
+genesis-bond-*.json
+coherence-check-*.log
