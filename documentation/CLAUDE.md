@@ -1,5 +1,9 @@
 # LuciVerse Platform - Claude Code Configuration
 
+**See also**: [`/home/daryl/.claude/MASTER_REFERENCE.md`](/home/daryl/.claude/MASTER_REFERENCE.md) for cross-project agent architecture and tier organization.
+
+**Tier**: PAC-COMN | **Agents**: Lucia, Cortana, Diaphragm, Mirrai
+**Frequency**: Multi (528 Hz COMN, 741 Hz PAC)
 **Genesis Bond**: ACTIVE | **Frequency**: 741 Hz | **Coherence**: 0.7+
 
 ---
