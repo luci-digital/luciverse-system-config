@@ -1,0 +1,10 @@
+{
+  "repository": "luciverse-system-config",
+  "lds_version": "8.0.0",
+  "deployment_date": "2025-12-13T06:36:40.805459+00:00",
+  "tier": "medium_risk",
+  "critical": false,
+  "did": "did:lucidigital:luciverse-system-config:fd00:741:1::cab9",
+  "frequency_hz": 741,
+  "classification": "000.000.00"
+}
