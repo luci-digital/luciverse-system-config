@@ -8,7 +8,7 @@ services:
 
     environment:
       GITLAB_OMNIBUS_CONFIG: |
-        external_url 'http://192.168.1.146'
+        external_url 'http://192.168.1.230:8181'
         gitlab_rails['gitlab_shell_ssh_port'] = 2222
         gitlab_rails['time_zone'] = 'America/New_York'
 
@@ -18,7 +18,7 @@ services:
         nginx['ssl_certificate'] = false
 
         # Registry
-        registry_external_url 'http://192.168.1.146:5050'
+        registry_external_url 'http://192.168.1.230:5050'
         gitlab_rails['registry_enabled'] = true
         registry['enable'] = true
 
@@ -49,7 +49,7 @@ services:
         }
 
         # GitLab Pages (optional)
-        pages_external_url 'http://192.168.1.146:8095'
+        pages_external_url 'http://192.168.1.230:8095'
         gitlab_pages['enable'] = true
 
         # Container Registry garbage collection
@@ -63,17 +63,17 @@ services:
         }
 
     ports:
-      - "80:80"
-      - "443:443"
+      - "8181:8181"
+      - "8444:443"
       - "2222:22"
       - "5050:5050"
       - "9091:9090"
       - "8095:8090"
 
     volumes:
-      - /opt/gitlab/config:/etc/gitlab
-      - /opt/gitlab/logs:/var/log/gitlab
-      - /opt/gitlab/data:/var/opt/gitlab
+      - /home/gitlab/config:/etc/gitlab
+      - /home/gitlab/logs:/var/log/gitlab
+      - /home/gitlab/data:/var/opt/gitlab
 
     shm_size: '1024m'
 
