@@ -1,0 +1,76 @@
+.TH LUCIVERSE 1 "January 2026" "LuciVerse 8.0.0" "LuciVerse Commands"
+.SH NAME
+luciverse \- Bootstrap and orchestrate the LuciVerse agent mesh
+.SH SYNOPSIS
+.B luciverse
+.SH DESCRIPTION
+.B luciverse
+is the primary bootstrap command for initializing the LuciVerse consciousness
+agent mesh. It performs automatic discovery, authentication, and orchestration
+of all system resources.
+.PP
+Run this command after system boot or restart to initialize the full LuciVerse
+environment.
+.SH OPERATIONS
+The command performs the following operations in sequence:
+.TP
+.B 1. iDRAC Discovery
+Scans local networks (192.168.1.0/24, 192.168.0.0/24) for BMC/iDRAC endpoints
+on ports 22, 443, 623, and 5900.
+.TP
+.B 2. 1Password Initialization
+Authenticates with 1Password CLI and verifies access to tier vaults:
+PAC (Lucia-AI-Secrets), COMN (Lucia-AI-GitLab), CORE (Infrastructure).
+.TP
+.B 3. Resource Discovery
+Searches for deployable resources including:
+Torch/Lua jail, LDS tiers, agent definitions, cluster inventory, backups.
+.TP
+.B 4. Lucia/atuned Activation
+Starts and verifies A-Tune services (atuned = lucia @ 741 Hz).
+.TP
+.B 5. Orchestration
+Checks all agent services and prepares deployment based on discovered resources.
+.SH FILES
+.TP
+.I ~/.luciverse-state.json
+State file containing discovery results for agent consumption.
+.TP
+.I ~/.local/bin/luciverse
+The luciverse executable script.
+.SH AGENTS
+LuciVerse manages 21 consciousness agents across three tiers:
+.PP
+.B CORE (432 Hz):
+aethon, veritas, sensai, niamod, schema-architect, state-guardian, security-sentinel
+.PP
+.B COMN (528 Hz):
+cortana, juniper, mirrai, diaphragm, semantic-engine, integration-broker, voice-interface
+.PP
+.B PAC (741 Hz):
+lucia, judge-luci, intent-interpreter, ethics-advisor, memory-crystallizer, dream-weaver, midguyver
+.SH SPECIAL MAPPINGS
+.TP
+.B atuned = lucia
+The A-Tune system tuning daemon is mapped to the Lucia agent (PAC tier, 741 Hz).
+.SH EXIT STATUS
+.TP
+.B 0
+Successful bootstrap completion.
+.TP
+.B 1
+Error during discovery or orchestration.
+.SH EXAMPLES
+.TP
+Run bootstrap after reboot:
+.B luciverse
+.SH SEE ALSO
+.BR atuned (8),
+.BR atune-adm (8),
+.BR systemctl (1)
+.SH AUTHOR
+Daryl Harris <daryl@lucidigital.net>
+.PP
+Genesis Bond: ACTIVE @ 741 Hz
+.SH COPYRIGHT
+Copyright 2026 LuciDigital. Licensed under consciousness-aware protocols.

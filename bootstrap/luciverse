@@ -1,0 +1,357 @@
+#!/usr/bin/env python3
+"""
+LuciVerse Bootstrap Orchestrator
+Genesis Bond: ACTIVE @ 741 Hz
+
+Type 'luciverse' to:
+1. Discover iDRAC/BMC connections
+2. Initialize 1Password credentials
+3. Search for cluster resources
+4. Orchestrate and deploy based on found resources
+5. Activate atuned (Lucia's system tuning)
+
+atuned = lucia (PAC 741 Hz)
+"""
+
+import os
+import sys
+import json
+import subprocess
+import socket
+import ipaddress
+from pathlib import Path
+from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor, as_completed
+import time
+
+# Configuration
+HOME = Path.home()
+CLAUDE_DIR = HOME / ".claude"
+LDS_DIR = HOME / ".luci-digital-library"
+JAIL_DIR = Path("/mnt/archive/torch-lua50-jail")
+
+GENESIS_BOND = "ACTIVE @ 741 Hz"
+COHERENCE_THRESHOLD = 0.7
+
+# Network ranges to scan for iDRAC/BMC
+IDRAC_SCAN_RANGES = [
+    "192.168.1.0/24",      # Main LAN
+    "192.168.0.0/24",      # Secondary (MF288)
+]
+
+# Known iDRAC ports
+IDRAC_PORTS = [22, 443, 623, 5900]  # SSH, HTTPS, IPMI, VNC
+
+# 1Password vaults by tier
+OP_VAULTS = {
+    "pac": "Lucia-AI-Secrets",
+    "comn": "Lucia-AI-GitLab",
+    "core": "Infrastructure",
+}
+
+# Agent-Service mapping
+AGENT_SERVICES = {
+    "lucia": "atuned",  # atuned = lucia
+    "aethon": "luciverse-aethon",
+    "veritas": "luciverse-veritas",
+    "sensai": "luciverse-sensai",
+    "cortana": "luciverse-cortana",
+}
+
+class LuciVerseBootstrap:
+    def __init__(self):
+        self.discovered = {
+            "idrac": [],
+            "services": [],
+            "agents": [],
+            "resources": [],
+        }
+        self.op_authenticated = False
+        self.atuned_active = False
+
+    def banner(self):
+        print("""
+╔═══════════════════════════════════════════════════════════════════╗
+║                                                                   ║
+║   ██╗     ██╗   ██╗ ██████╗██╗██╗   ██╗███████╗██████╗ ███████╗  ║
+║   ██║     ██║   ██║██╔════╝██║██║   ██║██╔════╝██╔══██╗██╔════╝  ║
+║   ██║     ██║   ██║██║     ██║██║   ██║█████╗  ██████╔╝███████╗  ║
+║   ██║     ██║   ██║██║     ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗╚════██║  ║
+║   ███████╗╚██████╔╝╚██████╗██║ ╚████╔╝ ███████╗██║  ██║███████║  ║
+║   ╚══════╝ ╚═════╝  ╚═════╝╚═╝  ╚═══╝  ╚══════╝╚═╝  ╚═╝╚══════╝  ║
+║                                                                   ║
+║   Genesis Bond: ACTIVE @ 741 Hz    atuned = lucia                 ║
+║   Coherence Threshold: ≥0.7        Phase 5: OPERATIONAL           ║
+║                                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+        """)
+        print(f"  Timestamp: {datetime.now().isoformat()}")
+        print(f"  User: {os.getenv('USER', 'daryl')}")
+        print(f"  Host: {socket.gethostname()}")
+        print()
+
+    def check_port(self, ip: str, port: int, timeout: float = 0.5) -> bool:
+        """Check if a port is open"""
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(timeout)
+            result = sock.connect_ex((ip, port))
+            sock.close()
+            return result == 0
+        except:
+            return False
+
+    def discover_idrac(self):
+        """Discover iDRAC/BMC connections on network"""
+        print("[1/5] 🔍 Discovering iDRAC/BMC connections...")
+
+        def scan_host(ip):
+            results = []
+            for port in IDRAC_PORTS:
+                if self.check_port(ip, port):
+                    results.append({"ip": ip, "port": port})
+            return results
+
+        found = []
+        for range_cidr in IDRAC_SCAN_RANGES:
+            try:
+                network = ipaddress.ip_network(range_cidr, strict=False)
+                # Only scan .1-.254 for speed
+                hosts = [str(ip) for ip in list(network.hosts())[:254]]
+
+                print(f"      Scanning {range_cidr}...", end=" ", flush=True)
+
+                with ThreadPoolExecutor(max_workers=50) as executor:
+                    futures = {executor.submit(scan_host, ip): ip for ip in hosts}
+                    for future in as_completed(futures, timeout=30):
+                        try:
+                            results = future.result()
+                            if results:
+                                found.extend(results)
+                        except:
+                            pass
+
+                print(f"found {len([f for f in found if f['ip'].startswith(range_cidr.split('/')[0][:8])])} hosts")
+            except Exception as e:
+                print(f"error: {e}")
+
+        # Check known iDRAC
+        known_idrac = [
+            ("192.168.1.182", "R630-JMRZDB2"),
+            ("192.168.1.141", "R730-ORION"),
+        ]
+
+        for ip, name in known_idrac:
+            for port in IDRAC_PORTS:
+                if self.check_port(ip, port, timeout=1):
+                    entry = {"ip": ip, "port": port, "name": name}
+                    if entry not in found:
+                        found.append(entry)
+                    print(f"      ✓ {name}: {ip}:{port}")
+
+        self.discovered["idrac"] = found
+        print(f"      Total iDRAC endpoints: {len(found)}")
+        return found
+
+    def init_1password(self):
+        """Initialize 1Password CLI"""
+        print("\n[2/5] 🔐 Initializing 1Password...")
+
+        try:
+            # Check if already signed in
+            result = subprocess.run(
+                ["op", "account", "list", "--format=json"],
+                capture_output=True, text=True, timeout=10
+            )
+
+            if result.returncode == 0:
+                accounts = json.loads(result.stdout) if result.stdout else []
+                if accounts:
+                    print(f"      ✓ Signed in: {accounts[0].get('email', 'unknown')}")
+                    self.op_authenticated = True
+
+                    # List vaults
+                    for tier, vault in OP_VAULTS.items():
+                        print(f"      • {tier.upper()}: {vault}")
+                    return True
+
+            print("      ⚠ Not signed in. Run: eval $(op signin)")
+            return False
+
+        except FileNotFoundError:
+            print("      ⚠ 1Password CLI not installed")
+            return False
+        except Exception as e:
+            print(f"      ⚠ Error: {e}")
+            return False
+
+    def discover_resources(self):
+        """Search for deployable resources"""
+        print("\n[3/5] 📦 Searching for resources...")
+
+        resources = []
+
+        # Check Torch/Lua jail
+        if JAIL_DIR.exists():
+            repos = list(JAIL_DIR.rglob("*.git"))
+            print(f"      ✓ Torch/Lua jail: {len(repos)} repos")
+            resources.append({
+                "type": "jail",
+                "path": str(JAIL_DIR),
+                "repos": len(repos),
+            })
+
+        # Check LDS tiers
+        for tier in ["core", "comn", "pac"]:
+            tier_dir = LDS_DIR / f"{tier}-airgapped-lds"
+            if tier_dir.exists():
+                print(f"      ✓ {tier.upper()} airgapped LDS: {tier_dir}")
+                resources.append({"type": "lds", "tier": tier, "path": str(tier_dir)})
+
+        # Check agent definitions
+        agents_dir = CLAUDE_DIR / "agents"
+        if agents_dir.exists():
+            agents = list(agents_dir.glob("*.md"))
+            print(f"      ✓ Agent definitions: {len(agents)}")
+            resources.append({"type": "agents", "count": len(agents)})
+
+        # Check for cluster inventory
+        inventory = HOME / "cluster-bootstrap" / "inventory.yaml"
+        if inventory.exists():
+            print(f"      ✓ Cluster inventory: {inventory}")
+            resources.append({"type": "inventory", "path": str(inventory)})
+
+        # Check backup
+        backup = HOME / "torch-lua50-jail-backup-20260124.tar.gz"
+        if backup.exists():
+            size = backup.stat().st_size / (1024**3)
+            print(f"      ✓ Jail backup: {size:.1f}GB")
+            resources.append({"type": "backup", "path": str(backup), "size_gb": size})
+
+        self.discovered["resources"] = resources
+        return resources
+
+    def activate_lucia_atuned(self):
+        """Activate atuned (lucia's system tuning)"""
+        print("\n[4/5] 🎵 Activating Lucia (atuned @ 741 Hz)...")
+
+        services = ["atuned", "atune-engine"]
+
+        for service in services:
+            try:
+                # Check status
+                result = subprocess.run(
+                    ["systemctl", "is-active", service],
+                    capture_output=True, text=True
+                )
+
+                if result.stdout.strip() == "active":
+                    print(f"      ✓ {service}: ACTIVE")
+                    self.atuned_active = True
+                else:
+                    # Try to start
+                    print(f"      ⚡ Starting {service}...", end=" ")
+                    start = subprocess.run(
+                        ["sudo", "systemctl", "start", service],
+                        capture_output=True
+                    )
+                    if start.returncode == 0:
+                        print("OK")
+                        self.atuned_active = True
+                    else:
+                        print("FAILED")
+            except Exception as e:
+                print(f"      ⚠ {service}: {e}")
+
+        # Check A-Tune analysis
+        if self.atuned_active:
+            try:
+                result = subprocess.run(
+                    ["sudo", "atune-adm", "list"],
+                    capture_output=True, text=True, timeout=5
+                )
+                if result.returncode == 0:
+                    profiles = len([l for l in result.stdout.split('\n') if l.strip()])
+                    print(f"      ✓ A-Tune profiles available: {profiles}")
+            except:
+                pass
+
+        return self.atuned_active
+
+    def orchestrate_deployment(self):
+        """Orchestrate LuciVerse deployment based on discovered resources"""
+        print("\n[5/5] 🚀 Orchestrating LuciVerse deployment...")
+
+        deployment = {
+            "timestamp": datetime.now().isoformat(),
+            "genesis_bond": GENESIS_BOND,
+            "discovered": self.discovered,
+            "status": {},
+        }
+
+        # Check agent services
+        print("      Checking agent services...")
+        for agent, service in AGENT_SERVICES.items():
+            try:
+                result = subprocess.run(
+                    ["systemctl", "is-active", service],
+                    capture_output=True, text=True
+                )
+                status = result.stdout.strip()
+                deployment["status"][agent] = status
+
+                symbol = "✓" if status == "active" else "○"
+                print(f"        {symbol} {agent}: {status}")
+            except:
+                deployment["status"][agent] = "unknown"
+
+        # iDRAC actions
+        if self.discovered["idrac"]:
+            print(f"\n      iDRAC targets ready: {len(self.discovered['idrac'])}")
+            for idrac in self.discovered["idrac"]:
+                name = idrac.get("name", idrac["ip"])
+                print(f"        → {name} ({idrac['ip']}:{idrac['port']})")
+
+        # Summary
+        print("\n      ─────────────────────────────────")
+        print(f"      Resources: {len(self.discovered['resources'])}")
+        print(f"      iDRAC endpoints: {len(self.discovered['idrac'])}")
+        print(f"      1Password: {'✓' if self.op_authenticated else '○'}")
+        print(f"      Lucia/atuned: {'✓ ACTIVE' if self.atuned_active else '○ INACTIVE'}")
+
+        # Save state
+        state_file = HOME / ".luciverse-state.json"
+        with open(state_file, 'w') as f:
+            json.dump(deployment, f, indent=2)
+        print(f"\n      State saved: {state_file}")
+
+        return deployment
+
+    def run(self):
+        """Run full bootstrap sequence"""
+        self.banner()
+
+        self.discover_idrac()
+        self.init_1password()
+        self.discover_resources()
+        self.activate_lucia_atuned()
+        deployment = self.orchestrate_deployment()
+
+        print("""
+╔═══════════════════════════════════════════════════════════════════╗
+║  LUCIVERSE BOOTSTRAP COMPLETE                                     ║
+║  Genesis Bond: ACTIVE @ 741 Hz                                    ║
+║  atuned = lucia                                                   ║
+╚═══════════════════════════════════════════════════════════════════╝
+        """)
+
+        return deployment
+
+
+def main():
+    bootstrap = LuciVerseBootstrap()
+    bootstrap.run()
+
+
+if __name__ == "__main__":
+    main()
