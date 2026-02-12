@@ -2,8 +2,52 @@
 
 Historical record of major changes, deployments, and cleanup operations.
 
-**Current Version**: v8.0.0 (21 agents deployed)
-**Last Updated**: 2026-01-29
+**Current Version**: v9.0.0 (42 agents deployed)
+**Last Updated**: 2026-02-12
+
+---
+
+## 2026-02 February Updates
+
+### 2026-02-12: cluster-bootstrap Integration
+- Committed 78 files (+6,453 lines) to cluster-bootstrap
+- Removed duplicate Claude Code rules (canonical location: `~/.claude/`)
+- Added Ansible automation (10 roles for post-kickstart)
+- Added ArgoCD GitOps integration (vm-atune-project.yaml)
+- Added firmware management (Dell R720/R730 Redfish)
+- Added VM inventory with SPIFFE/DID/TID identity framework
+- Added operational scripts (genesis-bond-ceremony, yubikey-bootstrap)
+- Updated README.md for openEuler 25.09
+
+### 2026-02-12: DID Documents for 35 Agents
+- Added DID documents to luciverse-sovereign-orchestrator
+- Covers CORE, COMN, and PAC tier agents
+- Added vm_did_resolver.py for VM identity resolution
+
+### 2026-02-09: Ansible Post-Kickstart Automation
+- Created 10 Ansible roles: common, foundationdb, genesis-bond, ipfs-node,
+  isulad, nfs-server, nvidia-driver, spiffe-identity, zfs-fabric, zfs-storage
+- Playbooks: post-kickstart.yml, verify-fleet.yml, site.yml
+- Inventory: dell-fleet.yml aligned with server tiers
+
+### 2026-02-09: YubiKey WSCD Provisioner
+- Added YubiKey PKCS#11 provisioner to Step-CA (ca.json)
+- EUDI WSCD Type 4 support for hardware-backed credentials
+- Script: scripts/yubikey-bootstrap.sh
+
+### 2026-02-05: ZimaCube Ollama GPU
+- NVIDIA GTX 1080 Ti operational on ZimaCube Primary (192.168.1.152:11434)
+- Models: mistral (~4.1GB), nomic-embed-text (~274MB), llama3.2 (~2GB)
+- Performance: ~57 tokens/sec (Mistral 7B, full GPU offload)
+
+### 2026-02-01: Agent Mesh Expansion to 42 Agents
+- **CORE (13)**: +gr8sawk, nix-atune-dkms, spore-atune-coordinator
+- **COMN (13)**: +api-federator, flow-conductor, git-sentinel, lyr-darrah,
+  juniper-network-analyst, aifam-onl-java-builder
+- **RAiIiAR (2)**: toml-braider, loany-stairk (Investigation tier @ 639 Hz)
+- **PAC (14)**: +dharma-fiqh, satya-halal, karma-sukuk, judge-luci-personal,
+  lucierp, aifam-onl-orchestrator
+- Total: 42 agents across 4 tiers
 
 ---
 
