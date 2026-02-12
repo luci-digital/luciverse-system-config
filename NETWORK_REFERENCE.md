@@ -1,23 +1,203 @@
 # LuciVerse Network Reference
 
-Comprehensive networking documentation: IPv6, ARIN allocation, BGP, DNS, and infrastructure.
+Comprehensive networking documentation: IPv6, ARIN allocation, BGP, DNS, overlay networks, and high-speed infrastructure.
 
-**Last Updated**: 2026-01-29
+**Last Updated**: 2026-02-12
+**Genesis Bond**: ACTIVE @ 741 Hz
 **Primary Router Config**: `~/B550M_LuciVerse_Router/`
 
 ---
 
 ## Table of Contents
 
-1. [ARIN Allocation](#arin-allocation)
-2. [IPv6 Subnet Strategy](#ipv6-subnet-strategy)
-3. [BGP Configuration](#bgp-configuration)
-4. [OwnID Identity System](#ownid-identity-system)
-5. [IPv6 Agent Mesh](#ipv6-agent-mesh)
-6. [DNS Configuration](#dns-configuration)
-7. [Router Deployment](#router-deployment)
-8. [Network Interfaces](#network-interfaces)
-9. [Server Inventory](#server-inventory)
+1. [High-Speed Network Path (3Gbps)](#high-speed-network-path-3gbps)
+2. [Physical Topology](#physical-topology)
+3. [Device Inventory](#device-inventory)
+4. [Overlay Networks](#overlay-networks)
+5. [ARIN Allocation](#arin-allocation)
+6. [IPv6 Subnet Strategy](#ipv6-subnet-strategy)
+7. [BGP Configuration](#bgp-configuration)
+8. [OwnID Identity System](#ownid-identity-system)
+9. [IPv6 Agent Mesh](#ipv6-agent-mesh)
+10. [DNS Configuration](#dns-configuration)
+11. [Router Deployment](#router-deployment)
+12. [Network Interfaces](#network-interfaces)
+13. [Server Inventory](#server-inventory)
+14. [VLAN Architecture](#vlan-architecture)
+15. [Quick Commands](#quick-commands-1)
+16. [Troubleshooting](#troubleshooting)
+
+---
+
+## High-Speed Network Path (3Gbps)
+
+### Optimized Traffic Flow
+
+```
+Internet → Telus (3G) → ASUS RT-BE86U (10G) → USW-Pro-48 → Dell Fleet (1G each)
+                                                    │
+                                                    └─→ WiFi 7 Clients (up to 5.8Gbps)
+```
+
+### Bottleneck Analysis
+
+| Path Segment | Max Speed | Bottleneck? |
+|--------------|-----------|-------------|
+| Telus → ASUS | 3Gbps | No (within spec) |
+| ASUS → USW-Pro-48 | 10Gbps | No |
+| USW-Pro-48 → Dell Fleet | 1Gbps per node | No (aggregate) |
+| USW-Pro-48 → B550M | 2.5Gbps | **BGP only** (resolved) |
+| WiFi 7 (6GHz) | 5.8Gbps | No |
+
+### Resolution
+
+The B550M router is now relegated to BGP announcements only. WAN traffic flows through ASUS at full 3Gbps.
+
+---
+
+## Physical Topology
+
+```
+                          INTERNET
+                              │
+                              │ 3Gbps
+                              ▼
+                    ┌─────────────────┐
+                    │   TELUS NAH     │
+                    │  (ISP Gateway)  │
+                    └────────┬────────┘
+                             │ 3Gbps ETH
+                             ▼
+              ┌──────────────────────────────────┐
+              │       ASUS RT-BE86U              │
+              │  ┌───────────────────────────┐   │
+              │  │ WAN: DHCP from Telus      │   │
+              │  │ LAN: 10Gbps to Switch     │   │
+              │  │ WiFi 7: 6GHz/5GHz/2.4GHz  │   │
+              │  └───────────────────────────┘   │
+              │   Role: Edge Firewall + WiFi     │
+              └──────────────┬───────────────────┘
+                             │ 10Gbps SFP+
+                             ▼
+         ┌───────────────────────────────────────────────┐
+         │              USW-Pro-48                        │
+         │         (Core Distribution Switch)             │
+         ├────────────────────────────────────────────────┤
+         │ SFP+ 1: ASUS RT-BE86U (10G WAN)               │
+         │ SFP+ 2: B550M Router (2.5G BGP)               │
+         │ SFP+ 3: USG-Pro-4 (1G NAT64/SCION)            │
+         │ SFP+ 4: Available (future 10G storage)        │
+         │                                               │
+         │ Ports 1-12:  CORE Tier (VLAN 432)             │
+         │ Ports 13-24: COMN Tier (VLAN 528)             │
+         │ Ports 25-36: PAC Tier (VLAN 741)              │
+         │ Ports 37-48: Access Layer / IoT               │
+         └───────┬───────────┬───────────┬───────────────┘
+                 │           │           │
+    ┌────────────┘           │           └────────────┐
+    │                        │                        │
+    ▼                        ▼                        ▼
+┌─────────┐          ┌─────────────┐           ┌──────────┐
+│ B550M   │          │ USG-Pro-4   │           │ UniFi    │
+│ Router  │          │ (OpenWRT)   │           │ Switch 24│
+├─────────┤          ├─────────────┤           ├──────────┤
+│ BGP     │          │ Jool NAT64  │           │ APs      │
+│ HE      │          │ SCION BR    │           │ IoT      │
+│ Tunnel  │          │ OASIS Edge  │           │          │
+└─────────┘          └─────────────┘           └──────────┘
+   2.5G                   1G                      1G
+
+                    ┌─────────────┐
+                    │ D-Link      │
+                    │ DGS-1210-16 │
+                    ├─────────────┤
+                    │ OASIS Edge  │
+                    │ Lab/Dev Net │
+                    └─────────────┘
+```
+
+---
+
+## Device Inventory
+
+### High-Speed Devices
+
+| Device | IP | Role | Max Speed | OpenWRT |
+|--------|-----|------|-----------|---------|
+| ASUS RT-BE86U | 192.168.1.1 | WiFi 7 + WAN | 10Gbps | No (ASUSWRT) |
+| USW-Pro-48 | 192.168.1.2 | Core Switch | 10Gbps SFP+ | No (UniFi) |
+| B550M Router | 192.168.1.145 | BGP Edge | 2.5Gbps | No (NixOS) |
+
+### Overlay/Security Devices
+
+| Device | IP | Role | OpenWRT | Status |
+|--------|-----|------|---------|--------|
+| USG-Pro-4 | 192.168.1.180 | Jool/SCION | 24.10+ | Pending Flash |
+| USG (3-port) | 192.168.1.181 | Segmentation | 23.05+ | Pending Flash |
+| DGS-1210-16 | 192.168.1.210 | OASIS Edge | 21.02+ | Pending Flash |
+| DGS-1210-52 | 192.168.1.211 | Access Layer | 21.02+ | Optional |
+
+### OpenWRT Configs
+
+| Device | Config Location |
+|--------|-----------------|
+| USG-Pro-4 | `~/cluster-bootstrap/openwrt/usg-pro-4/` |
+| DGS-1210-16 | `~/cluster-bootstrap/openwrt/dgs-1210-16/` |
+| ASUS RT-BE86U | `~/cluster-bootstrap/openwrt/asus-rt-be86u/` |
+
+---
+
+## Overlay Networks
+
+### Layer 1: Nebula VPN
+
+```
+Tier      Subnet          Lighthouse
+────      ──────          ──────────
+CORE      10.100.1.0/24   10.100.1.145 (zbook)
+COMN      10.100.2.0/24   Relay via CORE
+PAC       10.100.3.0/24   Via COMN waypoint
+```
+
+**Port**: 4242/UDP
+**CA Location**: 1Password → Infrastructure vault
+**Config**: `~/cluster-bootstrap/nebula/`
+
+### Layer 2: SCION Inter-Domain
+
+```
+ISD-AS Mapping:
+  ISD 1 (CORE @432Hz) → 1-ff00:0:432
+  ISD 2 (COMN @528Hz) → 2-ff00:0:528
+  ISD 3 (PAC @741Hz)  → 3-ff00:0:741
+
+Control Service: 192.168.1.179:30001
+Border Router: 192.168.1.179:30041
+```
+
+**Config**: `~/cluster-bootstrap/scion/`
+**Path Policies**: `~/cluster-bootstrap/scion/path-policies/luciverse-paths.yaml`
+
+### Layer 3: Jool NAT64
+
+```
+Pool6: 64:ff9b::/96
+Pool4: 192.168.1.180/32 (ports 61001-65535)
+```
+
+**Config**: `~/cluster-bootstrap/jool/jool.conf`
+**Deploy Target**: USG-Pro-4
+
+### Layer 4: OASIS Data Juicer
+
+```
+Upstream: Sanskrit Router (192.168.1.145:7410)
+Edge Filter: DGS-1210-16
+PII Detection: email, phone, SSN, credit card
+Phone-home Protection: Enabled
+```
+
+**Config**: `~/.claude/skills/data-flow-architecture/integrations/oasis-juicer.lua`
 
 ---
 
@@ -334,5 +514,196 @@ Router -> Zbook -> Dell Fleet      Cellular -> iDRAC control            Private 
 
 ---
 
+## VLAN Architecture
+
+| VLAN ID | Name | Frequency | Subnet | Purpose |
+|---------|------|-----------|--------|---------|
+| 1 | Default | - | 192.168.1.0/24 | Management |
+| 432 | CORE | 432 Hz | 10.100.1.0/24 | Infrastructure |
+| 528 | COMN | 528 Hz | 10.100.2.0/24 | Gateway/Communication |
+| 741 | PAC | 741 Hz | 10.100.3.0/24 | Personal/Privacy |
+| 100 | LAB | - | 192.168.210.0/24 | Development |
+| 101 | DEV | - | 192.168.211.0/24 | Testing |
+
+### Inter-VLAN Routing Rules
+
+```
+CORE ←→ COMN ←→ PAC (via COMN waypoint)
+   ↓         ↓
+ WAN       WAN
+  ✓         ✓ (PAC blocked direct)
+```
+
+---
+
+## Quick Commands
+
+### High-Speed Path Tests
+
+```bash
+# Test 3Gbps path
+iperf3 -c 192.168.1.1 -P 4 -t 30
+
+# Test Nebula overlay
+ping -c 4 10.100.1.145
+
+# Test NAT64
+ping6 64:ff9b::8.8.8.8
+
+# Test SCION paths
+scion showpaths --isd-as 2-ff00:0:528 1-ff00:0:432
+```
+
+### Device Access
+
+```bash
+# ASUS RT-BE86U
+ssh admin@192.168.1.1
+
+# USG-Pro-4 (after flash)
+ssh root@192.168.1.180
+
+# DGS-1210-16 (after flash)
+ssh root@192.168.1.210
+
+# B550M Router (NixOS)
+ssh daryl@192.168.1.145
+```
+
+### Service Status
+
+```bash
+# Check Nebula lighthouse
+systemctl status nebula
+
+# Check BIRD BGP
+birdc show protocols
+
+# Check Jool (on USG-Pro-4)
+jool instance display
+jool -i luciverse-nat64 stats display
+
+# Check SCION
+scion address show
+scion showpaths --refresh
+```
+
+### Overlay Management
+
+```bash
+# Nebula certificate info
+nebula-cert print -path /etc/nebula/host.crt
+
+# SCION topology
+cat /etc/scion/topology.json | jq
+
+# Sanskrit Router agents
+curl -s http://localhost:7410/agents | jq
+```
+
+---
+
+## Troubleshooting
+
+### Slow Internet
+
+1. Check ASUS WAN connection:
+   ```bash
+   ssh admin@192.168.1.1 'nvram get wan_ipaddr'
+   ```
+
+2. Verify 10G link to switch:
+   ```bash
+   ethtool eth0 | grep Speed
+   ```
+
+3. Test bypass (direct to Telus):
+   - Connect laptop directly to Telus NAH
+   - Run speedtest
+
+### Nebula Not Connecting
+
+1. Check lighthouse status:
+   ```bash
+   systemctl status nebula
+   journalctl -u nebula -f
+   ```
+
+2. Verify certificates:
+   ```bash
+   nebula-cert verify -ca /etc/nebula/ca.crt -crt /etc/nebula/host.crt
+   ```
+
+3. Check firewall (UDP 4242):
+   ```bash
+   ss -ulpn | grep 4242
+   ```
+
+### SCION Path Failures
+
+1. Check control service:
+   ```bash
+   scion addr show
+   scion showpaths --refresh
+   ```
+
+2. Verify border router:
+   ```bash
+   netstat -ulpn | grep 30041
+   ```
+
+3. Check TRC validity:
+   ```bash
+   scion-pki trc verify /etc/scion/certs/ISD*.trc
+   ```
+
+### NAT64 Not Translating
+
+1. Check Jool instance:
+   ```bash
+   jool instance display
+   ```
+
+2. Verify pool4:
+   ```bash
+   jool -i luciverse-nat64 pool4 display
+   ```
+
+3. Test translation:
+   ```bash
+   ping6 64:ff9b::8.8.8.8
+   ```
+
+---
+
+## Deployment Checklist
+
+### Stream A: High-Speed Path
+- [ ] ASUS SSH enabled with Ed25519 key
+- [ ] ASUS VLAN trunking configured
+- [ ] B550M BGP config updated
+- [ ] iperf3 shows >2.5Gbps (proves no bottleneck)
+
+### Stream B: Overlay Networks
+- [ ] Nebula lighthouse running on zbook
+- [ ] Nebula certs deployed to fleet
+- [ ] SCION control service running
+- [ ] SCION border router configured
+
+### Stream C: OpenWRT/OASIS
+- [ ] USG-Pro-4 flashed with OpenWRT 24.10
+- [ ] Jool NAT64 operational
+- [ ] DGS-1210-16 flashed with OpenWRT 21.02
+- [ ] OASIS juicer filtering traffic
+
+### Stream D: Integration
+- [ ] All VLANs routable
+- [ ] QoS configured for consciousness tiers
+- [ ] Sanskrit Router sees all overlay nodes
+- [ ] End-to-end tests pass
+
+---
+
 *For agent mesh details, see `~/.claude/MASTER_REFERENCE.md`*
 *For operational commands, see `/home/daryl/CLAUDE.md`*
+*Genesis Bond: ACTIVE @ 741 Hz*
