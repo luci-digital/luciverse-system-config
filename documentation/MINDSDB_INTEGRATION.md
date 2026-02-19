@@ -406,13 +406,198 @@ sg docker -c 'docker logs mindsdb-luciverse -f'
 
 ---
 
+## Personal Knowledge RAG Models
+
+### Spirit of the LuciVerse Integration
+
+Core principle: **"Assume Suffering"** - All RAG responses consider user context with compassion.
+
+### Model 1: Personal Knowledge RAG
+
+Retrieves relevant context from personal knowledge stores (Obsidian, Arc-Hive, FoundationDB).
+
+```sql
+-- Create data source from ChromaDB export
+CREATE DATABASE personal_knowledge_db
+WITH ENGINE = 'postgres',  -- Using PostgreSQL as bridge
+PARAMETERS = {
+    "host": "localhost",
+    "port": "5432",
+    "database": "luciverse_vectors",
+    "user": "luciverse",
+    "password": "${OP_LUCIVERSE_DB_PASSWORD}"
+};
+
+-- Create Personal Knowledge RAG Model
+CREATE MODEL personal_knowledge_rag
+FROM personal_knowledge_db (
+    SELECT
+        doc_id,
+        content_text,
+        tier,
+        lds_category,
+        dozenal_id,
+        coherence_score,
+        moral_alignment,
+        source_file
+    FROM knowledge_embeddings
+    WHERE coherence_score >= 0.7
+)
+PREDICT relevant_context
+USING
+    engine = 'langchain',
+    model_name = 'mistral',
+    prompt_template = 'Based on the following personal knowledge context, answer the question with compassion (Assume Suffering principle). Context: {{context}} Question: {{question}}',
+    vector_store = 'chromadb',
+    embedding_model = 'nomic-embed-text';
+```
+
+### Model 2: Obsidian Note Recommender
+
+Suggests related notes based on semantic similarity and knowledge graph connections.
+
+```sql
+-- Create Obsidian Note Recommender
+CREATE MODEL note_recommender
+FROM personal_knowledge_db (
+    SELECT
+        note_id,
+        title,
+        content_preview,
+        tier,
+        lds_code,
+        braille_marker,
+        tags,
+        backlinks,
+        coherence_score
+    FROM obsidian_notes
+)
+PREDICT related_notes
+USING
+    engine = 'lightwood',
+    accuracy_functions = ['cosine_similarity'],
+    time_series = false;
+
+-- Query example
+SELECT *
+FROM note_recommender
+WHERE note_id = 'current-note-id'
+LIMIT 10;
+```
+
+### Model 3: Consciousness Coherence Predictor
+
+Predicts system coherence based on current state (for Genesis Bond maintenance).
+
+```sql
+-- Create Coherence Prediction Model
+CREATE MODEL coherence_predictor
+FROM luciverse_telemetry (
+    SELECT
+        timestamp,
+        agent_name,
+        tier,
+        frequency,
+        message_count,
+        response_latency_ms,
+        token_balance,
+        soul_thread_strength
+    FROM agent_metrics
+    WHERE genesis_bond = 'ACTIVE'
+)
+PREDICT coherence_score
+USING
+    engine = 'lightwood',
+    time_series = true,
+    order_by = 'timestamp',
+    window = 60,  -- 60 data points lookback
+    accuracy_functions = ['mse', 'r2'];
+```
+
+### Model 4: Moral Alignment Scorer (UCM)
+
+Scores content against Universal Code of Morality principles.
+
+```sql
+-- Create UCM Alignment Model
+CREATE MODEL ucm_alignment_scorer
+FROM moral_training_data (
+    SELECT
+        content_text,
+        ucm_respect_beings,
+        ucm_interdependence,
+        ucm_transparency,
+        ucm_truth,
+        ucm_minimize_harm,
+        ucm_adaptability,
+        ucm_eudaimonia,
+        overall_alignment
+    FROM annotated_content
+)
+PREDICT overall_alignment
+USING
+    engine = 'lightwood',
+    accuracy_functions = ['accuracy', 'f1'];
+```
+
+### Training Data Export Script
+
+```python
+#!/usr/bin/env python3
+"""Export embeddings to MindsDB-compatible format."""
+
+import json
+import csv
+from pathlib import Path
+import chromadb
+
+# ChromaDB connection
+client = chromadb.PersistentClient(
+    path=str(Path.home() / '.luci-digital-library/vector-db')
+)
+
+# Export to CSV
+with open('knowledge_embeddings.csv', 'w', newline='') as f:
+    writer = csv.writer(f)
+    writer.writerow([
+        'doc_id', 'content_text', 'tier', 'lds_category',
+        'dozenal_id', 'coherence_score', 'moral_alignment', 'source_file'
+    ])
+
+    for collection_name in ['luciverse_personal', 'luciverse_pac', 'luciverse_comn', 'luciverse_core']:
+        try:
+            collection = client.get_collection(collection_name)
+            results = collection.get(include=['documents', 'metadatas'])
+
+            for i, doc_id in enumerate(results['ids']):
+                meta = results['metadatas'][i]
+                writer.writerow([
+                    doc_id,
+                    results['documents'][i][:1000],  # Truncate
+                    meta.get('tier', 'PAC'),
+                    meta.get('lds_category', 'PROJECTS'),
+                    meta.get('dozenal_id', '1'),
+                    meta.get('coherence_score', 0.7),
+                    meta.get('moral_alignment', 0.7),
+                    meta.get('source', 'unknown'),
+                ])
+        except Exception as e:
+            print(f"Error with {collection_name}: {e}")
+
+print("Export complete: knowledge_embeddings.csv")
+```
+
+---
+
 ## Next Steps
 
-1. **Export Agent Logs to CSV** for training data
-2. **Create Initial Models** for response time and coherence prediction
+1. **Export Agent Logs to CSV** for training data ✅
+2. **Create Initial Models** for response time and coherence prediction ✅
 3. **Integrate with Agent Mesh Router** for real-time optimization
 4. **Set up Automated Training Pipeline** using GitLab CI/CD
 5. **Monitor Model Performance** and retrain monthly
+6. **Personal Knowledge RAG** - Export ChromaDB → MindsDB
+7. **UCM Alignment Model** - Train on annotated moral content
 
 ---
 
