@@ -22,8 +22,16 @@ Historical record of major changes, deployments, and cleanup operations.
 - GCS port 6380 (Redis occupies 6379), dashboard at `:8265`
 - mTLS enabled: head cert (PAC CA), worker cert (CORE CA), full CA bundle
 - Worker join script for 7 Dell servers with auto-detect fabric/mgmt networking
+- Systemd unit auto-deploys TLS certs + installs Ray on worker startup
 - Added `check_ray_head()` to auto-remediation
 - Git: `a6373aea`, `089e9b76` (claude-config)
+
+### 2026-02-22: AIFAM Legislature SMTP + Frontend
+- AIFAM SMTP service (port 9550): DID-authenticated email with COMN CA TLS
+- Legislature WASM frontend (port 9552): HTTPS static server with COMN CA TLS
+- Both certs added to `generate-tid-certs.sh` for future regeneration
+- Fixed `serve.py` default cert fallback (was pointing to wrong cert)
+- Git: `f9329378` (claude-config)
 
 ### 2026-02-22: Squish GUI Testing for LuciOS
 - Squish 9.2.0 integrated with Qt 6.8.3 (ELF-patched)
