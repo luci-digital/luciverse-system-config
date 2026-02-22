@@ -3,11 +3,76 @@
 Historical record of major changes, deployments, and cleanup operations.
 
 **Current Version**: v9.0.0 (42 agents deployed)
-**Last Updated**: 2026-02-12
+**Last Updated**: 2026-02-22
 
 ---
 
 ## 2026-02 February Updates
+
+### 2026-02-22: iDigit.me JWKS x5c Chain — LuciVerse Root CA
+- Replaced self-signed "iDigit.me CA" with proper LuciVerse PKI x5c chain
+- Leaf cert: EC P-256, WebSvc CA, SAN: `DNS:idigit.me, URI:did:web:idigit.me` (5yr validity)
+- x5c chain: leaf (WebSvc) + Root CA (ROOT Tier @ 741 Hz)
+- Updated CF Worker secrets: `ISSUER_PRIVATE_KEY_JWK`, `ISSUER_X5C_CERT`, `ISSUER_X5C_CA`
+- Certs committed to `certs/` dir (private key gitignored)
+- 50 tests passed. Git: `a34e439` (idigitme repo)
+
+### 2026-02-22: Ray PAC Cluster on ZimaOS
+- Deployed Ray 2.44.0 head node on ZimaOS (Docker, `--network host`)
+- GCS port 6380 (Redis occupies 6379), dashboard at `:8265`
+- mTLS enabled: head cert (PAC CA), worker cert (CORE CA), full CA bundle
+- Worker join script for 7 Dell servers with auto-detect fabric/mgmt networking
+- Added `check_ray_head()` to auto-remediation
+- Git: `a6373aea`, `089e9b76` (claude-config)
+
+### 2026-02-22: Squish GUI Testing for LuciOS
+- Squish 9.2.0 integrated with Qt 6.8.3 (ELF-patched)
+- 15/15 test cases, ~200 tests, 148s runtime
+- GitLab CI 2-stage pipeline (build + test:squish), pre-push hook
+- Hourly smoke test timer (`lucios-smoke-test.timer`)
+- Git: `2301242` (lucios repo)
+
+### 2026-02-22: Pangolin — 5 New Resources + Dynamic IP Update
+- Added: ocsp, dashboard.io, intel, openclaw, federation (29 total resources)
+- Public IPv4 updated: `104.157.42.49` → `104.157.42.44`
+- Updated 28 Cloudflare A records (TTL 300, not proxied)
+- All endpoints externally verified returning 200
+
+### 2026-02-21: Full TLS Enablement (34 Agents + 25 Infra)
+- All deployed services now TLS-enabled. 73 certs via `generate-tid-certs.sh`
+- `base_agent.py` `_create_ssl_context()` now checks `AGENT_CERT` env var
+- HTTP→HTTPS sweep: 38+ files fixed across 4 commits
+- Patterns: `requests`→`verify=False`, `httpx`→`verify=False`, `aiohttp`→`ssl=False`, `curl`→`-k`
+- Auto-remediation TLS fix: all curl calls updated to `https://` + `-k`
+- 122 systemd units version-controlled at `skills/agent-mesh/systemd/services/`
+
+### 2026-02-21: Threaded Identity Auto-Injection
+- Unified identity bundle auto-injected into every entity at boot
+- Bundle: `{entity_name, type, tid, did, spiffe_id, ipv6, cert_serial, cert_expires, tier, frequency, genesis_bond}`
+- 8 files modified, 4 new files (identity_injector.lua, enroll scripts)
+- Heartbeat cert fallback for 11 HTTP-only agents
+- Coverage: 44/44 entities (100%). Git: `808dd186`
+
+### 2026-02-21: Speakeasy Labyrinth MTD
+- Moving Target Defense with pulse-synchronized port rotation (HMAC-SHA256)
+- Controller on port 9444 (raw TCP), agents NiAmAi7_ (:9433) and z3Nz/! (:9432)
+- 42 agents mapped to 10000-10999 range, nftables `inet labyrinth` table
+- Fixed `sudo` removal (CAP_NET_ADMIN) and `{{` double-brace template bug
+- Git: `cc663623`
+
+### 2026-02-21: Intelligence Hub
+- Deployed on port 9560 (HTTPS, COMN CA)
+- 14 feeds, 13 parsers, 6,096 events. GenesisCouncil 3-stage deliberation
+- Git: `b3c4aa8` (intelligence-hub repo)
+
+### 2026-02-21: ACME dns-01 Bug Fix for XiPKI
+- Patched XiPKI 6.5.3 `ChallengeValidator` (queries `host` not `_acme-challenge.host`)
+- Certbot DNS-01 flow now works end-to-end with BIND9 DNSSEC inline-signing
+
+### 2026-02-21: Fix CERT_ENGINE_URL Port + Scheme in 18 Systemd Units
+- Stage 1: Port `8741→8744` in 17 units (8741 was aspera-racing)
+- Stage 2: Scheme `http→https` in 18 units (TLS enablement broke plaintext clients)
+- Both stages required rolling restart of all agents
 
 ### 2026-02-12: cluster-bootstrap Integration
 - Committed 78 files (+6,453 lines) to cluster-bootstrap
