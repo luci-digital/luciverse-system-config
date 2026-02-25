@@ -1,0 +1,36 @@
+version: "3.8"
+
+# 1Password Connect Server for LuciVerse Infrastructure
+# Provides secure secret management via REST API
+
+services:
+  connect-api:
+    image: 1password/connect-api@sha256:8fe7bcd50c9e73899e0a1aa5aa43421ca75fbceacb33dd07f6418c4116e637a1
+    container_name: onepassword-connect-api
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./1password-credentials.json:/home/opuser/.op/1password-credentials.json:ro
+      - ./data:/home/opuser/.op/data
+    environment:
+      - OP_SESSION_TIMEOUT=30m
+      - OP_LOG_LEVEL=info
+    networks:
+      - op-connect
+
+  connect-sync:
+    image: 1password/connect-sync@sha256:d5e937b2b7e314dbbaffacf469dc8f30376b5954a3ad836c8d96e6cb579d7fab
+    container_name: onepassword-connect-sync
+    restart: unless-stopped
+    volumes:
+      - ./1password-credentials.json:/home/opuser/.op/1password-credentials.json:ro
+      - ./data:/home/opuser/.op/data
+    environment:
+      - OP_LOG_LEVEL=info
+    networks:
+      - op-connect
+
+networks:
+  op-connect:
+    driver: bridge

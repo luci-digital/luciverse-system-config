@@ -1,0 +1,70 @@
+name: onepassword-connect-api
+services:
+    onepassword-connect-api:
+        environment:
+            OP_LOG_LEVEL: info
+            OP_SESSION_TIMEOUT: 30m
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+        image: 1password/connect-api@sha256:8fe7bcd50c9e73899e0a1aa5aa43421ca75fbceacb33dd07f6418c4116e637a1
+        network_mode: bridge
+        ports:
+            - target: 8080
+              published: "8082"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/1password-connect
+              target: /home/opuser/.op
+        x-casaos:
+            envs:
+                - container: OP_SESSION_TIMEOUT
+                  description:
+                    en_us: ""
+                - container: OP_LOG_LEVEL
+                  description:
+                    en_us: ""
+                - container: PATH
+                  description:
+                    en_us: ""
+                - container: SSL_CERT_FILE
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "8080"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /home/opuser/.op/data
+                  description:
+                    en_US: ""
+                - container: /home/opuser/.op/1password-credentials.json
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: onepassword-connect-api_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: onepassword-connect-api
+    port_map: "8082"
+    scheme: http
+    store_app_id: onepassword-connect-api
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: onepassword-connect-api

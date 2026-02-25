@@ -1,0 +1,60 @@
+name: onepassword-connect-sync-onepassword-connect-sync-1
+services:
+    onepassword-connect-sync-onepassword-connect-sync-1:
+        environment:
+            OP_LOG_LEVEL: info
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            SSL_CERT_FILE: /etc/ssl/certs/ca-certificates.crt
+        image: 1password/connect-sync@sha256:d5e937b2b7e314dbbaffacf469dc8f30376b5954a3ad836c8d96e6cb579d7fab
+        network_mode: op-connect
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/1password-connect/1password-credentials.json
+              target: /home/opuser/.op/1password-credentials.json
+            - type: bind
+              source: /DATA/AppData/1password-connect/data
+              target: /home/opuser/.op/data
+        x-casaos:
+            envs:
+                - container: OP_LOG_LEVEL
+                  description:
+                    en_us: ""
+                - container: SSL_CERT_FILE
+                  description:
+                    en_us: ""
+                - container: PATH
+                  description:
+                    en_us: ""
+            image: ""
+            volumes:
+                - container: /home/opuser/.op/1password-credentials.json
+                  description:
+                    en_US: ""
+                - container: /home/opuser/.op/data
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: onepassword-connect-sync-onepassword-connect-sync-1_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: onepassword-connect-sync-onepassword-connect-sync-1
+    scheme: http
+    store_app_id: onepassword-connect-sync-onepassword-connect-sync-1
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: onepassword-connect-sync-onepassword-connect-sync-1
