@@ -1,0 +1,4 @@
+interface:
+  display_name: "Luciverse Genesis Bond Ops"
+  short_description: "Automate Lucia AI Genesis Bond auth and deployment operations"
+  default_prompt: "Use this skill to run Genesis Bond authentication checks, OIDC callback diagnostics, deployment smoke tests, and safe commit/push steps for Luciverse web properties."
