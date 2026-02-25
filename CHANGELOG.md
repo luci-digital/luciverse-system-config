@@ -2,12 +2,35 @@
 
 Historical record of major changes, deployments, and cleanup operations.
 
-**Current Version**: v9.0.0 (42 agents deployed)
-**Last Updated**: 2026-02-22
+**Current Version**: v10.0.0 (42 agents deployed + CozyStack GitOps ready)
+**Last Updated**: 2026-02-23
 
 ---
 
 ## 2026-02 February Updates
+
+### 2026-02-23: CozyStack GitOps Repository (Dell Fleet K8s Migration)
+- Created `~/luciverse-gitops/` — 84-file FluxCD GitOps repo for CozyStack cluster
+- 42 agent K8s Deployments + Services across 3 tenant namespaces (CORE/COMN/PAC)
+- Managed databases: PostgreSQL (3 clusters), Redis (3 Sentinel HA), FoundationDB (operator)
+- 4 per-tier ClusterIssuers for XiPKI ACME dns-01 (cert-manager as client only)
+- LINSTOR storage classes: replicated (2-copy, default) + fast-local (single)
+- Phase 5 Ingress: 8 rules for *.lucidigital.io + ExternalName proxies to zbook/ZimaOS
+- RayCluster CRD: head + 4 compute workers (2-10 scaling) + 1 GPU worker (Supermicro)
+- Shared genesis-bond-config ConfigMap eliminates env var duplication across all agents
+- Base agent Dockerfile: Python 3.13-slim, nc healthcheck for raw TCP agents
+- Prometheus: ServiceMonitors + 5 alert rules + Grafana coherence dashboard
+- Talos patches: CozyStack volumes + LINSTOR DRBD modules + tenant nodeLabels
+- service-status-api.py: +`/api/v1/k8s/databases`, +`/api/v1/migration/status`
+- GitLab: http://192.168.1.145:8929/daryl/luciverse-gitops (auto-created via SSH push)
+- Git: `f3b61af` (luciverse-gitops), `70a578f` (cluster-bootstrap), `9f01c91d` (claude-config)
+- **Status**: All manifests ready. Blocked on Dell fleet power-on + iDRAC IP alignment.
+
+### 2026-02-23: BBOT Bifractal Optical Transport Layer
+- Airgapped optical data link for Photon SDN — 26-75x faster than SnoPro QR
+- BTP wire protocol: 3-plane redundancy + NoZero base-9 color cells + checkerboard sync
+- 5 new files (+2,130 lines), 43 tests passing
+- Git: `a55cd8f5` (claude-config)
 
 ### 2026-02-22: iDigit.me JWKS x5c Chain — LuciVerse Root CA
 - Replaced self-signed "iDigit.me CA" with proper LuciVerse PKI x5c chain
