@@ -1,0 +1,64 @@
+name: wyoming-openwakeword
+services:
+    wyoming-openwakeword:
+        command:
+            - --preload-model
+            - ok_nabu
+        environment:
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        image: rhasspy/wyoming-openwakeword@sha256:52cb1168731a1849fc28cf339c935fde58746bbabc94226668a40ef6ddf5d42b
+        network_mode: bridge
+        ports:
+            - target: 10400
+              published: "10400"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/openwakeword/models
+              target: /custom
+            - type: bind
+              source: /DATA/openwakeword/share
+              target: /share
+        x-casaos:
+            envs:
+                - container: PATH
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "10400"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /custom
+                  description:
+                    en_US: ""
+                - container: /share
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: wyoming-openwakeword_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: wyoming-openwakeword
+    port_map: "10400"
+    scheme: http
+    store_app_id: wyoming-openwakeword
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: wyoming-openwakeword

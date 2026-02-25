@@ -1,0 +1,85 @@
+name: ollama-ollama-1_old
+services:
+    ollama-ollama-1_old:
+        command:
+            - serve
+        environment:
+            LD_LIBRARY_PATH: /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+            NVIDIA_DRIVER_CAPABILITIES: compute,utility
+            NVIDIA_VISIBLE_DEVICES: all
+            OLLAMA_FLASH_ATTENTION: "1"
+            OLLAMA_HOST: 0.0.0.0:11434
+            OLLAMA_MAX_LOADED_MODELS: "2"
+            OLLAMA_NUM_PARALLEL: "4"
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        image: ollama/ollama@sha256:63f052826604a28a83795df1a66d9e364410c0b8d1357a62a885c62cef05cdbb
+        network_mode: bridge
+        ports:
+            - target: 11434
+              published: "11434"
+              protocol: tcp
+        restart: "no"
+        volumes:
+            - type: bind
+              source: /DATA/ollama
+              target: /root/.ollama
+        x-casaos:
+            envs:
+                - container: OLLAMA_NUM_PARALLEL
+                  description:
+                    en_us: ""
+                - container: OLLAMA_FLASH_ATTENTION
+                  description:
+                    en_us: ""
+                - container: NVIDIA_VISIBLE_DEVICES
+                  description:
+                    en_us: ""
+                - container: NVIDIA_DRIVER_CAPABILITIES
+                  description:
+                    en_us: ""
+                - container: OLLAMA_HOST
+                  description:
+                    en_us: ""
+                - container: OLLAMA_MAX_LOADED_MODELS
+                  description:
+                    en_us: ""
+                - container: PATH
+                  description:
+                    en_us: ""
+                - container: LD_LIBRARY_PATH
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "11434"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /root/.ollama
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: ollama-ollama-1_old_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: ollama-ollama-1_old
+    port_map: "11434"
+    scheme: http
+    store_app_id: ollama-ollama-1_old
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: ollama-ollama-1

@@ -1,0 +1,89 @@
+name: mosquitto
+services:
+    mosquitto:
+        command:
+            - /usr/sbin/mosquitto
+            - -c
+            - /mosquitto/config/mosquitto.conf
+        environment:
+            DOWNLOAD_SHA256: fd905380691ac65ea5a93779e8214941829e3d6e038d5edff9eac5fd74cbed02
+            GPG_KEYS: A0D6EEA1DCAE49A635A3B2F0779B22DFB3E717B7
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            VERSION: 2.1.2
+        image: eclipse-mosquitto@sha256:9cfdd46ad59f3e3e5f592f6baf57ab23e1ad00605509d0f5c1e9b179c5314d87
+        network_mode: bridge
+        ports:
+            - target: 9001
+              published: "9001"
+              protocol: tcp
+            - target: 1883
+              published: "1883"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/mosquitto/config
+              target: /mosquitto/config
+            - type: bind
+              source: /DATA/mosquitto/data
+              target: /mosquitto/data
+            - type: bind
+              source: /DATA/mosquitto/log
+              target: /mosquitto/log
+        x-casaos:
+            envs:
+                - container: PATH
+                  description:
+                    en_us: ""
+                - container: VERSION
+                  description:
+                    en_us: ""
+                - container: DOWNLOAD_SHA256
+                  description:
+                    en_us: ""
+                - container: GPG_KEYS
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "9001"
+                  description:
+                    en_us: ""
+                - container: "1883"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /mosquitto/config
+                  description:
+                    en_US: ""
+                - container: /mosquitto/data
+                  description:
+                    en_US: ""
+                - container: /mosquitto/log
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: mosquitto_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: mosquitto
+    port_map: "9001"
+    scheme: http
+    store_app_id: mosquitto
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: mosquitto

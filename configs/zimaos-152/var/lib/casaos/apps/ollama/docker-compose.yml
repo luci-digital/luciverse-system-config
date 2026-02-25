@@ -1,0 +1,78 @@
+name: ollama
+services:
+    ollama:
+        command:
+            - serve
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - capabilities:
+                            - gpu
+                          count: -1
+        environment:
+            LD_LIBRARY_PATH: /usr/local/nvidia/lib:/usr/local/nvidia/lib64
+            NVIDIA_DRIVER_CAPABILITIES: compute,utility
+            NVIDIA_VISIBLE_DEVICES: all
+            OLLAMA_HOST: 0.0.0.0:11434
+            OLLAMA_MAX_LOADED_MODELS: "2"
+            OLLAMA_NUM_PARALLEL: "4"
+            OLLAMA_FLASH_ATTENTION: "1"
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        image: ollama/ollama@sha256:63f052826604a28a83795df1a66d9e364410c0b8d1357a62a885c62cef05cdbb
+        network_mode: bridge
+        ports:
+            - target: 11434
+              published: "11434"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/ollama
+              target: /root/.ollama
+        x-casaos:
+            envs:
+                - container: OLLAMA_MAX_LOADED_MODELS
+                  description:
+                    en_us: Max models loaded simultaneously
+                - container: NVIDIA_VISIBLE_DEVICES
+                  description:
+                    en_us: GPU devices visible to container
+                - container: OLLAMA_NUM_PARALLEL
+                  description:
+                    en_us: Parallel request handling
+                - container: OLLAMA_FLASH_ATTENTION
+                  description:
+                    en_us: Enable flash attention for faster inference
+                - container: OLLAMA_HOST
+                  description:
+                    en_us: Listen address
+            ports:
+                - container: "11434"
+                  description:
+                    en_us: Ollama API port
+            volumes:
+                - container: /root/.ollama
+                  description:
+                    en_us: Model storage
+networks:
+    default:
+        name: ollama_default
+x-casaos:
+    architectures:
+        - amd64
+    author: LuciVerse
+    category: AI
+    description:
+        en_US: Ollama with NVIDIA GTX 1080 Ti GPU acceleration
+    developer: Ollama
+    icon: https://cdn.jsdelivr.net/gh/IceWhaleTech/CasaOS-AppStore@main/Apps/Ollama/icon.png
+    main: ollama
+    port_map: "11434"
+    scheme: http
+    store_app_id: ollama
+    tagline:
+        en_US: GPU-accelerated LLM inference
+    thumbnail: ""
+    title:
+        en_US: Ollama (GPU)

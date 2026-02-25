@@ -1,0 +1,78 @@
+name: luciverse-dropzone
+services:
+    luciverse-dropzone:
+        command:
+            - -c
+            - /config/settings.json
+        environment:
+            GID: "1000"
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            UID: "1000"
+        image: filebrowser/filebrowser@sha256:a7b81cab28cf93de4c3ac97403d92f38d23191d7247e9c37611d4afa2d8d0c69
+        network_mode: bridge
+        ports:
+            - target: 80
+              published: "3923"
+              protocol: tcp
+        restart: "no"
+        volumes:
+            - type: bind
+              source: /DATA/luciverse/filebrowser-config
+              target: /config
+            - type: bind
+              source: /var/lib/docker/volumes/9fe75ed7d1627c2b6291ca7e961e9d0ffcd56ed948ec7f524bd5d05f24be6318/_data
+              target: /database
+            - type: bind
+              source: /DATA/luciverse/dropzone
+              target: /srv
+        x-casaos:
+            envs:
+                - container: PATH
+                  description:
+                    en_us: ""
+                - container: UID
+                  description:
+                    en_us: ""
+                - container: GID
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "80"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /config
+                  description:
+                    en_US: ""
+                - container: /database
+                  description:
+                    en_US: ""
+                - container: /srv
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: luciverse-dropzone_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: luciverse-dropzone
+    port_map: "3923"
+    scheme: http
+    store_app_id: luciverse-dropzone
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: luciverse-dropzone

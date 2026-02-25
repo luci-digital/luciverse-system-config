@@ -1,0 +1,156 @@
+name: pangolin
+services:
+    gerbil:
+        cap_add:
+            - NET_ADMIN
+            - SYS_MODULE
+        cpu_shares: 90
+        command:
+            - --reachableAt=http://gerbil:3004
+            - --generateAndSaveKeyTo=/var/config/key
+            - --remoteConfig=http://pangolin:3001/api/v1/
+        container_name: gerbil
+        depends_on:
+            pangolin:
+                condition: service_healthy
+                required: true
+        deploy:
+            resources:
+                limits:
+                    memory: "33558163456"
+                reservations: {}
+        image: docker.io/fosrl/gerbil@sha256:c12152ad087677a35cc1a8f176ad4ed5bb567aba5f033b116647c897b86d5461
+        networks:
+            default:
+                aliases:
+                    - gerbil
+        ports:
+            - mode: ingress
+              target: 51820
+              published: "51820"
+              protocol: udp
+            - mode: ingress
+              target: 21820
+              published: "21820"
+              protocol: udp
+            - mode: ingress
+              target: 443
+              published: "443"
+              protocol: tcp
+            - mode: ingress
+              host_ip: 192.168.1.152
+              target: 443
+              published: "8443"
+              protocol: tcp
+            - mode: ingress
+              host_ip: 192.168.1.152
+              target: 80
+              published: "8880"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/pangolin/config
+              target: /var/config
+              bind:
+                create_host_path: true
+    pangolin:
+        cpu_shares: 90
+        command: []
+        container_name: pangolin
+        deploy:
+            resources:
+                limits:
+                    memory: "33558163456"
+                reservations: {}
+        healthcheck:
+            test:
+                - CMD
+                - curl
+                - -f
+                - http://localhost:3001/api/v1/
+            timeout: 10s
+            interval: 10s
+            retries: 15
+        image: docker.io/fosrl/pangolin@sha256:938e742e407f88ae2c4da42a30008e887c449764a745c9342ac9def0de5a019e
+        networks:
+            default:
+                aliases:
+                    - pangolin
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/pangolin/config
+              target: /app/config
+              bind:
+                create_host_path: true
+    traefik:
+        cpu_shares: 90
+        command:
+            - |
+              set -e
+              cp /etc/traefik/traefik_config.yml /tmp/traefik.yml
+              sed -i 's|http://pangolin:|http://172.20.0.2:|g' /tmp/traefik.yml
+              echo '172.20.0.2 pangolin' >> /etc/hosts
+              exec traefik --configFile=/tmp/traefik.yml
+        container_name: traefik
+        depends_on:
+            gerbil:
+                condition: service_started
+                restart: true
+                required: true
+            pangolin:
+                condition: service_healthy
+                required: true
+        deploy:
+            resources:
+                limits:
+                    memory: "33558163456"
+                reservations: {}
+        entrypoint:
+            - /bin/sh
+            - -c
+        image: docker.io/traefik:v3.6
+        network_mode: service:gerbil
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/pangolin/config/traefik
+              target: /etc/traefik
+              read_only: true
+              bind:
+                create_host_path: true
+            - type: bind
+              source: /DATA/AppData/pangolin/config/letsencrypt
+              target: /letsencrypt
+              bind:
+                create_host_path: true
+            - type: bind
+              source: /DATA/AppData/pangolin/config/traefik/logs
+              target: /var/log/traefik
+              bind:
+                create_host_path: true
+            - type: bind
+              source: /DATA/AppData/pangolin/config/traefik/plugins-local
+              target: /plugins-local
+              read_only: true
+              bind:
+                create_host_path: true
+networks:
+    default:
+        name: pangolin
+        driver: bridge
+        ipam:
+            config:
+                - subnet: 172.20.0.0/16
+x-casaos:
+    author: self
+    category: self
+    hostname: ""
+    icon: ""
+    index: /
+    is_uncontrolled: false
+    port_map: "51820"
+    scheme: http
+    title:
+        custom: Pangolin

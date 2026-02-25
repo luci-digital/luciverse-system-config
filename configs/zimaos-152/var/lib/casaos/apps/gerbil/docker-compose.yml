@@ -1,0 +1,80 @@
+name: gerbil
+services:
+    gerbil:
+        cap_add:
+            - NET_ADMIN
+            - SYS_MODULE
+        command:
+            - --reachableAt=http://gerbil:3004
+            - --generateAndSaveKeyTo=/var/config/key
+            - --remoteConfig=http://pangolin:3001/api/v1/
+        environment:
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        image: fosrl/gerbil@sha256:c12152ad087677a35cc1a8f176ad4ed5bb567aba5f033b116647c897b86d5461
+        network_mode: pangolin
+        ports:
+            - target: 21820
+              published: "21820"
+              protocol: udp
+            - target: 443
+              published: "443"
+              protocol: tcp
+            - target: 51820
+              published: "51820"
+              protocol: udp
+            - target: 80
+              published: "8880"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/AppData/pangolin/config
+              target: /var/config
+        x-casaos:
+            envs:
+                - container: PATH
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "21820"
+                  description:
+                    en_us: ""
+                - container: "443"
+                  description:
+                    en_us: ""
+                - container: "51820"
+                  description:
+                    en_us: ""
+                - container: "80"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /var/config
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: gerbil_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: gerbil
+    port_map: "21820"
+    scheme: http
+    store_app_id: gerbil
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: gerbil

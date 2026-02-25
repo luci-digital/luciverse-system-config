@@ -1,0 +1,79 @@
+name: nodered
+services:
+    nodered:
+        environment:
+            FLOWS: flows.json
+            NODE_PATH: /usr/src/node-red/node_modules:/data/node_modules
+            NODE_RED_VERSION: v4.1.5
+            NODE_VERSION: 20.20.0
+            PATH: /usr/src/node-red/node_modules/.bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            TZ: America/New_York
+            YARN_VERSION: 1.22.22
+        image: nodered/node-red@sha256:7dfe40efdd7b9f21916f083802bfe60a762bc020969d95553ffa020c97a72eb9
+        network_mode: bridge
+        ports:
+            - target: 1880
+              published: "1880"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/nodered
+              target: /data
+        x-casaos:
+            envs:
+                - container: TZ
+                  description:
+                    en_us: ""
+                - container: PATH
+                  description:
+                    en_us: ""
+                - container: NODE_VERSION
+                  description:
+                    en_us: ""
+                - container: YARN_VERSION
+                  description:
+                    en_us: ""
+                - container: NODE_RED_VERSION
+                  description:
+                    en_us: ""
+                - container: NODE_PATH
+                  description:
+                    en_us: ""
+                - container: FLOWS
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "1880"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /data
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: nodered_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    icon: ""
+    image: null
+    is_uncontrolled: false
+    main: nodered
+    port_map: "1880"
+    scheme: http
+    store_app_id: nodered
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        en_US: nodered

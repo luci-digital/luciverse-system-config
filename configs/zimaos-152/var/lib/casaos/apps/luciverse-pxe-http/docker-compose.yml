@@ -1,0 +1,74 @@
+name: luciverse-pxe-http
+services:
+    luciverse-pxe-http:
+        cpu_shares: 90
+        command: []
+        container_name: static-file-server
+        deploy:
+            resources:
+                limits:
+                    memory: "67330932736"
+                reservations: {}
+        environment:
+            CORS: "true"
+            FOLDER: /web
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        image: halverneus/static-file-server@sha256:9e46688910b1cf9328c3b55784f08a63c53e70a276ccaf76bfdaaf2fbd0019fa
+        network_mode: bridge
+        ports:
+            - target: 8080
+              published: "8742"
+              protocol: tcp
+        restart: unless-stopped
+        volumes:
+            - type: bind
+              source: /DATA/luciverse/pxe-server/web
+              target: /web
+        x-casaos:
+            envs:
+                - container: FOLDER
+                  description:
+                    en_us: ""
+                - container: CORS
+                  description:
+                    en_us: ""
+                - container: PATH
+                  description:
+                    en_us: ""
+            image: ""
+            ports:
+                - container: "8080"
+                  description:
+                    en_us: ""
+            volumes:
+                - container: /web
+                  description:
+                    en_US: ""
+networks:
+    default:
+        name: luciverse-pxe-http_default
+x-casaos:
+    architectures:
+        - amd64
+    author: CasaOS User
+    category: unknown
+    description:
+        en_US: ""
+    developer: unknown
+    hostname: ""
+    icon: ""
+    image: null
+    index: /
+    is_uncontrolled: false
+    main: luciverse-pxe-http
+    port_map: "8742"
+    scheme: http
+    store_app_id: luciverse-pxe-http
+    tagline:
+        en_US: This is a compose app converted from a legacy app
+    thumbnail: ""
+    tips:
+        custom: This is a compose app converted from a legacy app
+    title:
+        custom: ""
+        en_US: luciverse-pxe-http
