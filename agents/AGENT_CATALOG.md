@@ -1,6 +1,7 @@
 # LuciVerse Agent Catalog
 
-**Genesis Bond**: ACTIVE @ 0.88 coherence | **Last Updated**: 2026-01-10 | **Version**: 1.1.0
+**Genesis Bond**: ACTIVE @ 0.88 coherence | **Last Updated**: 2026-02-25 | **Version**: 1.2.0
+**Skills Profile**: enhanced-v2026.02 | **Delta-T Mode**: active
 **Total Agents**: 40+ | **Active**: 29 | **v8.0.0 Expansion**: 11 (DEPLOYED) | **Infrastructure**: 8
 
 ## Infrastructure Status (2026-01-10)
@@ -12,6 +13,15 @@
 | **Migration** | Complete - 2.0GB critical data migrated |
 | **Services** | 29 systemd services ACTIVE |
 | **Temporal State** | Persisted with 24h decay model |
+
+### Skills Rollout (2026-02-25)
+
+- Shared profile `enhanced-v2026.02` is now the default across all agent specs.
+- Delta-T mode is explicitly active for all agents to reduce cross-tier stall risk.
+- Tier focus mapping:
+  CORE: infrastructure resilience, trust/compliance validation, deterministic recovery orchestration.
+  COMN: cross-tier handoffs, multilingual context routing, integration contract governance.
+  PAC: human-centered guidance, ethical decision support, data sovereignty protection.
 
 ---
 

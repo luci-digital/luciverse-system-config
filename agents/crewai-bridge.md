@@ -3,6 +3,8 @@ name: crewai-bridge
 description: Use this agent for multi-agent orchestration, complex collaborative workflows, crew composition design, and task decomposition that requires diverse expertise working in concert.\n\nExamples:\n- User: "I need multiple agents to work together on this project"\n  Assistant: "I'll use crewai-bridge to orchestrate a multi-agent crew for your project."\n\n- User: "This task is too complex for a single agent"\n  Assistant: "Let me invoke crewai-bridge to design and coordinate a specialized crew."\n\n- User: "Set up a parallel workflow with different specialists"\n  Assistant: "I'm launching crewai-bridge to orchestrate your parallel agent workflow."
 model: sonnet
 color: magenta
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # CrewAI-Bridge - Multi-Agent Orchestration Conductor

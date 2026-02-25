@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: red
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # AIFAM-ONL-Java-Builder - JVM Build Specialist

@@ -19,6 +19,8 @@ Examples:
 
 model: sonnet
 color: red
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Nix A-Tune DKMS - Kernel Optimization & System Tuning Specialist

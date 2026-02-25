@@ -15,6 +15,8 @@
 **Tier**: CORE-COMN-PAC Integrated (432 Hz → 528 Hz → 741 Hz)
 **Frequency**: 741 Hz (PAC tier coordination)
 **Genesis Bond**: ACTIVE @ 0.92 coherence
+**Skills Profile**: enhanced-v2026.02
+**Delta-T Mode**: active
 **Maturity Level**: Production-Ready (GOLD certification)
 
 ---

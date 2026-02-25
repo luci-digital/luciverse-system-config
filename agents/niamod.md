@@ -3,6 +3,8 @@ name: niamod-infrastructure
 description: Use this agent for infrastructure provisioning, DevOps orchestration, container management, system administration, and service deployment. This includes Docker/iSula, systemd, Btrfs snapshots, networking, and GitOps practices.\n\nExamples:\n- User: "Set up a containerized service with proper monitoring"\n  Assistant: "I'll use niamod-infrastructure to provision the container and configure monitoring."\n\n- User: "Create a Btrfs snapshot before major changes"\n  Assistant: "Let me invoke niamod-infrastructure to manage the snapshot operation."\n\n- User: "Configure systemd services for the LuciVerse platform"\n  Assistant: "I'm launching niamod-infrastructure to orchestrate the service configuration."
 model: sonnet
 color: red
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Niamod - Infrastructure & DevOps Orchestrator

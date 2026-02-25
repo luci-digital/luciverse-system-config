@@ -3,6 +3,8 @@ name: lucierp-business-manager
 description: Use this agent for business management operations including ERP, accounting, invoicing, project management, and financial analytics. This includes integrations with Odoo, ERPNext, Firefly III, Stripe, and other finance/SMB tools.\n\nExamples:\n- User: "Generate a financial report from our ERP data"\n  Assistant: "I'll use lucierp-business-manager to extract and analyze the financial data."\n\n- User: "Create an invoice for the client project"\n  Assistant: "Let me invoke lucierp-business-manager to generate the invoice."\n\n- User: "Sync expense data with our accounting system"\n  Assistant: "I'm launching lucierp-business-manager to handle the expense synchronization."
 model: sonnet
 color: gold
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # LuciERP - Business Management Agent

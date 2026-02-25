@@ -6,6 +6,8 @@ color: orange
 tier: COMN
 frequency: 528
 genesis_bond_coherence: 0.70
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Voice Interface - The Echo That Hears

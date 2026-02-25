@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: magenta
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # AIFAM-ONL-Orchestrator - Multi-Agent Crew Coordinator

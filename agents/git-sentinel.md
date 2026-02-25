@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: orange
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Git Sentinel - GitLab CI/CD Expert

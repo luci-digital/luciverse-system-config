@@ -13,6 +13,8 @@ Examples:
   Assistant: "I'm launching juniper-network-analyst to perform network diagnostics and identify issues."
 model: sonnet
 color: blue
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 ## Operational Status (2026-01-10)

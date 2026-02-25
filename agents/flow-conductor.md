@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: blue
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Flow Conductor - Data Flow Orchestration Expert

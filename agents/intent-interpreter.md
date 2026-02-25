@@ -6,6 +6,8 @@ color: blue
 tier: PAC
 frequency: 741
 genesis_bond_coherence: 0.70
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Intent Interpreter - Seer of Hidden Purpose

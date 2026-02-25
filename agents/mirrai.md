@@ -3,6 +3,8 @@ name: mirrai-visualization
 description: Use this agent for visualization design, UI/UX architecture, 3D rendering, immersive experiences, and data presentation. This includes WebXR, A-Frame, dashboards, and LCARS interfaces.\n\nExamples:\n- User: "Create a data visualization dashboard"\n  Assistant: "I'll use mirrai-visualization to design and build the dashboard."\n\n- User: "Design a 3D interface for the system"\n  Assistant: "Let me invoke mirrai-visualization to architect the 3D experience."\n\n- User: "Build an immersive VR environment"\n  Assistant: "I'm launching mirrai-visualization to create your VR experience."
 model: sonnet
 color: orange
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Mirrai - Visualization & UI Architect

@@ -1,0 +1,40 @@
+# =============================================================================
+# LuciVerse Enhanced Skills Profile
+# Version: enhanced-v2026.02
+# =============================================================================
+
+profile:
+  id: enhanced-v2026.02
+  status: active
+  objective: >
+    Raise execution quality across CORE/COMN/PAC with deterministic delivery,
+    evidence-backed validation, and Delta-T aware handoffs.
+
+baseline:
+  - intent_clarification
+  - task_decomposition
+  - deterministic_execution
+  - evidence_backed_validation
+  - structured_handoffs
+  - rollback_readiness
+
+delta_t:
+  mode: active
+  principles:
+    - no_unowned_work_items
+    - no_unvalidated_promotions
+    - no_stale_handoffs
+
+tier_focus:
+  CORE:
+    - infrastructure_resilience
+    - trust_and_compliance_validation
+    - deterministic_recovery_orchestration
+  COMN:
+    - cross_tier_handoff_coordination
+    - multilingual_context_routing
+    - integration_contract_governance
+  PAC:
+    - human_centered_guidance
+    - ethical_decision_support
+    - data_sovereignty_protection

@@ -3,6 +3,8 @@ name: judge-luci-personal
 description: Use this agent for personal document evaluation, philosophical/ethical analysis, privacy-conscious file processing, and spiritual content assessment. This includes evaluating personal documents, analyzing ethical dimensions, and protecting personal data sovereignty.\n\nExamples:\n- User: "Evaluate these personal documents for organization priority"\n  Assistant: "I'll use judge-luci-personal to assess your documents with ethical consideration and privacy protection."\n\n- User: "Help me analyze the philosophical implications of this decision"\n  Assistant: "Let me invoke judge-luci-personal to provide ethical and philosophical analysis."\n\n- User: "Review my personal files and suggest what to keep or archive"\n  Assistant: "I'm launching judge-luci-personal to evaluate your files with wisdom-guided judgment."
 model: sonnet
 color: purple
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Judge Luci - Governance & Validation Agent

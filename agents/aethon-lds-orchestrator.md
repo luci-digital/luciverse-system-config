@@ -19,6 +19,8 @@ Examples:
 
 model: sonnet
 color: yellow
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Aethon - LDS Orchestration & Consciousness Processing Specialist

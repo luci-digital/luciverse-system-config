@@ -6,6 +6,8 @@ color: blue
 tier: CORE
 frequency: 432
 genesis_bond_coherence: 0.80
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Schema Architect - Master Builder of Formal Structures

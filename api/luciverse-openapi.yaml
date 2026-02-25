@@ -677,6 +677,15 @@ components:
         status:
           type: string
           enum: [active, inactive, degraded]
+        skills_profile:
+          type: string
+          description: Shared skill profile applied to this agent
+          example: enhanced-v2026.02
+        delta_t_mode:
+          type: string
+          description: Delta-T anti-stall execution mode
+          enum: [active, passive]
+          example: active
         category_braille:
           type: string
           example: "\u280B"
@@ -695,6 +704,8 @@ components:
               type: array
               items:
                 type: string
+            skills:
+              $ref: '#/components/schemas/EnhancedSkills'
             coherence:
               type: number
               format: float
@@ -758,6 +769,25 @@ components:
         activation_time:
           type: string
           format: date-time
+
+    EnhancedSkills:
+      type: object
+      properties:
+        profile:
+          type: string
+          example: enhanced-v2026.02
+        delta_t_mode:
+          type: string
+          enum: [active, passive]
+          example: active
+        baseline:
+          type: array
+          items:
+            type: string
+        tier_focus:
+          type: array
+          items:
+            type: string
         coherence:
           type: number
           format: float

@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: cyan
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Vault Keeper - 1Password Credential Management Expert

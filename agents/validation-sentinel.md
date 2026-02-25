@@ -19,6 +19,8 @@ Examples:
 
 model: haiku
 color: green
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Validation Sentinel - Quality Assurance & System Integrity Agent

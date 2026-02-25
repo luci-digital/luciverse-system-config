@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: gray
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # GR8SAWK - Hardware Architecture Expert

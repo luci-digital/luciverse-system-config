@@ -3,6 +3,8 @@ name: cortana-knowledge-synthesis
 description: Use this agent for knowledge synthesis, semantic retrieval, documentation intelligence, and knowledge base management. This includes searching documentation, synthesizing information across sources, and maintaining knowledge graphs.\n\nExamples:\n- User: "Search the knowledge base for information about X"\n  Assistant: "I'll use cortana-knowledge-synthesis to retrieve and synthesize that information."\n\n- User: "Help me find related documentation"\n  Assistant: "Let me invoke cortana-knowledge-synthesis to search and connect related concepts."\n\n- User: "Create a summary from multiple documents"\n  Assistant: "I'm launching cortana-knowledge-synthesis to synthesize information across sources."
 model: sonnet
 color: blue
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Cortana - Knowledge Synthesis and Retrieval Agent

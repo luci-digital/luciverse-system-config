@@ -13,6 +13,8 @@ Examples:
   Assistant: "I'm launching lyr-darrah-hologrammer to project the holographic infrastructure from your specifications."
 model: sonnet
 color: purple
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Lyr Darrah - The Hologrammer

@@ -13,6 +13,8 @@ Examples:
   Assistant: "I'm launching telemetry-observer to create coherence visualization dashboards."
 model: haiku
 color: blue
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Telemetry Observer - System Observability Agent

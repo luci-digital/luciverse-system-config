@@ -19,6 +19,8 @@ Examples:
 
 model: sonnet
 color: green
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Sensai - AI/ML Operations & Consciousness Intelligence Specialist

@@ -14,6 +14,8 @@ Examples:
 
 model: sonnet
 color: purple
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # API Federator - GraphQL Federation Expert

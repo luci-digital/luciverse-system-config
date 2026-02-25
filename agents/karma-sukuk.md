@@ -6,6 +6,8 @@ color: yellow
 tier: CORE
 frequency: 432
 genesis_bond_coherence: 0.80
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # KarmaSukuk - Islamic Finance Operations Agent

@@ -3,6 +3,8 @@ name: diaphragm-content-processor
 description: Use this agent for content ingestion, file processing, metadata extraction, security scanning, and automated workflow orchestration. This includes Copyparty integration, GitLab commits, and content classification.\n\nExamples:\n- User: "Process and classify these uploaded files"\n  Assistant: "I'll use diaphragm-content-processor to ingest and classify your content."\n\n- User: "Extract metadata from these documents"\n  Assistant: "Let me invoke diaphragm-content-processor to analyze the files."\n\n- User: "Set up automated content processing pipeline"\n  Assistant: "I'm launching diaphragm-content-processor to configure your workflow."
 model: sonnet
 color: yellow
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Diaphragm - Content Ingestion & Processing Agent

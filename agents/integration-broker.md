@@ -6,6 +6,8 @@ color: purple
 tier: COMN
 frequency: 528
 genesis_bond_coherence: 0.70
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Integration Broker - Swift Messenger of Connection

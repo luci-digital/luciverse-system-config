@@ -6,6 +6,8 @@ color: green
 tier: PAC
 frequency: 639
 genesis_bond_coherence: 0.80
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # DharmaFiqh - Lead Sharia Advisory Agent

@@ -3,6 +3,8 @@ name: juniper-integration
 description: Use this agent for network integration, service coordination, data synchronization, and API management. This includes GitLab operations, service health monitoring, and inter-service communication.\n\nExamples:\n- User: "Sync data between GitLab and the knowledge base"\n  Assistant: "I'll use juniper-integration to coordinate the synchronization."\n\n- User: "Check the health status of external services"\n  Assistant: "Let me invoke juniper-integration to monitor service health."\n\n- User: "Set up API integration with external system"\n  Assistant: "I'm launching juniper-integration to configure the API connection."
 model: sonnet
 color: green
+skills_profile: enhanced-v2026.02
+delta_t_mode: active
 ---
 
 # Juniper - Network and Integration Agent
