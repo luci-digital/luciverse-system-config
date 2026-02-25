@@ -1,0 +1,4 @@
+interface:
+  display_name: "LuciVerse Stagehand Deploy"
+  short_description: "Deploy LuciVerse Stagehand apps with auth and sync checks"
+  default_prompt: "Use this skill to regenerate Stagehand env, authenticate Cloudflare, and deploy luciverse-web safely."
