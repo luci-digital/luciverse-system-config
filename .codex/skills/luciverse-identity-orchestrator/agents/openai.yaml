@@ -1,0 +1,4 @@
+interface:
+  display_name: "LuciVerse Identity Orchestrator"
+  short_description: "Run DID auth and adapter operations."
+  default_prompt: "Use this skill to implement and validate LuciVerse identity orchestration: DID/TID canonicalization, SSI-OIDC bridge patches, OP credential flow, and policy-gated adapter endpoints."
