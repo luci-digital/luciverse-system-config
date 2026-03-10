@@ -1,56 +1,21 @@
-# Secrets and credentials
-*.token
-*.key
-*.pem
-*.crt
-*.csr
-*password*
-*secret*
+# Auto-generated and environment data
+archives/
+logs/
+pids/
+obsidian-portal/
 
-# Logs
-*.log
-*.log.*
-
-# Temporary files
-*.tmp
-*.swp
-*.bak
-*~
-
-# Python
-__pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-venv/
-env/
-ENV/
-
-# Node
-node_modules/
-npm-debug.log*
-
-# IDE
-.vscode/
-.idea/
-*.iml
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Docker
-.env
-docker-compose.override.yml
-
-# Data directories (keep structure, ignore content)
-data/
-storage/
-backups/
+# SQLite databases
 *.db
-*.sqlite
+knowledge/lds/*.db
 
-# Genesis Bond validation (keep scripts, ignore outputs)
-genesis-bond-*.json
-coherence-check-*.log
+# JSON Reports & State files
+knowledge/lds/*.json
+knowledge/lds/responses/
+
+# Generated obsidian vaults
+obsidian/
+
+# OS / Python specific
+.DS_Store
+__pycache__/
+*.pyc
