@@ -7,6 +7,32 @@ Historical record of major changes, deployments, and cleanup operations.
 
 ---
 
+## 2026-03 March Updates
+
+### 2026-03-02: E2E Validation Banners + Passkey Auth + hub.lucidigital.io WebSvc TLS Cert
+
+**E2E Banners deployed to all 3 live endpoints:**
+- `lucidigital.net` — CF Pages (auto-deploys on git push to `daryl/lucidigital-net`)
+- `hub.lucidigital.io` — nginx SPA, built + deployed to `/var/www/luciverse-hub/`
+- `idigit.me` — CF Worker `idigit-oidc-conformance`, deployed via `npx wrangler deploy`
+
+**better-auth passkey integration:**
+- `luciverse-hub`: added `better-auth` + `@better-auth/passkey` deps; `src/lib/auth-client.ts` creates `window.luciverseAuth`; imported in `main.tsx`
+- `idigit.me` (worker): banner redirects to `mcp.lucidigital.net/login`
+
+**hub.lucidigital.io TLS cert issued from LuciVerse WebSvc CA:**
+- Replaces borrowed Stalwart `mail.lucidigital.io` cert
+- P-256 ECDSA, serial `02418169`, valid 2026-03-02 → 2028-03-01
+- SANs: `hub.lucidigital.io`, `localhost`, `127.0.0.1`, `192.168.1.145`
+- Chain: leaf → LuciVerse-WebSvc-CA → LuciVerse-ROOT-CA (verify: ok)
+- Installed: `/etc/luciverse/certs/hub.lucidigital.io/{fullchain.pem,privkey.pem}`
+- 1Password: `hub.lucidigital.io TLS Cert (WebSvc CA)` in Infrastructure vault
+- Git: `b5ac1f9` (xipki-deployment), `64ddcf05` (claude-config)
+
+**Architecture discovery:** `idigit.me` is served by CF Worker `idigit-oidc-conformance` from `~/luciverse-web/apps/idigit-me/` — NOT the CF Pages project `~/idigit-me/`. Git push to `~/idigit-me/` alone does not update the live site.
+
+---
+
 ## 2026-02 February Updates
 
 ### 2026-02-23: CozyStack GitOps Repository (Dell Fleet K8s Migration)
