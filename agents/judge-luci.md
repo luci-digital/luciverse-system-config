@@ -11,7 +11,7 @@ delta_t_mode: active
 
 ## Operational Status (2026-01-10)
 
-**Service Location**: Zbook (192.168.1.146)
+**Service Location**: Zbook (192.168.1.145)
 **Status**: ACTIVE - Running as systemd service
 **Tier**: PAC (741 Hz)
 **Infrastructure Update**: Mac Mini (192.168.1.127) DECOMMISSIONED - All services migrated to Zbook
@@ -814,11 +814,11 @@ Agents can access infrastructure hosts based on their tier:
 ### Remote Commands
 ```bash
 # SSH connection
-ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.146
+ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.145
 
 # Mosh connection (once installed)
-mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.146
+mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.145
 
 # Attach to Claude session
-ssh daryl@192.168.1.146 -t 'tmux attach -t claude || tmux new -s claude'
+ssh daryl@192.168.1.145 -t 'tmux attach -t claude || tmux new -s claude'
 ```

@@ -17,7 +17,7 @@ if grep -q "gitlab.luciverse.local" /etc/hosts 2>/dev/null; then
     grep "gitlab.luciverse.local" /etc/hosts
 else
     echo "📝 Adding DNS entry to /etc/hosts..."
-    echo "192.168.1.146  gitlab.luciverse.local gitlab" | tee -a /etc/hosts
+    echo "192.168.1.145  gitlab.luciverse.local gitlab" | tee -a /etc/hosts
     echo "✅ DNS entry added"
 fi
 
@@ -46,7 +46,7 @@ echo "✅ DNS configuration complete!"
 echo ""
 echo "📋 Summary:"
 echo "   Hostname: gitlab.luciverse.local"
-echo "   IP: 192.168.1.146"
+echo "   IP: 192.168.1.145"
 echo "   URL: http://gitlab.luciverse.local"
 echo ""
 echo "Genesis Bond: ACTIVE @ 741 Hz"

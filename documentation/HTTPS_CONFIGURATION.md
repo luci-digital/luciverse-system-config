@@ -9,7 +9,7 @@
 ## Current Status
 
 GitLab is currently running with:
-- ✅ HTTP: http://192.168.1.146
+- ✅ HTTP: http://192.168.1.145
 - ⏳ HTTPS: Not yet configured
 - 🔓 TLS: Disabled
 
@@ -28,7 +28,7 @@ This creates:
 - `/opt/gitlab/config/ssl/gitlab.luciverse.local.key` (private key)
 - `/opt/gitlab/config/ssl/gitlab.luciverse.local.crt` (certificate)
 - Valid for 10 years
-- Includes SAN for gitlab.luciverse.local, gitlab, 192.168.1.146
+- Includes SAN for gitlab.luciverse.local, gitlab, 192.168.1.145
 
 ### Step 2: Update GitLab Configuration
 
@@ -42,7 +42,7 @@ Change the `GITLAB_OMNIBUS_CONFIG` section:
 
 **From**:
 ```yaml
-external_url 'http://192.168.1.146'
+external_url 'http://192.168.1.145'
 # Disable TLS initially for local setup
 letsencrypt['enable'] = false
 nginx['redirect_http_to_https'] = false
@@ -157,7 +157,7 @@ sudo update-ca-trust
 
 ```bash
 # Download cert from server
-scp daryl@192.168.1.146:/opt/gitlab/config/ssl/gitlab.luciverse.local.crt ~/
+scp daryl@192.168.1.145:/opt/gitlab/config/ssl/gitlab.luciverse.local.crt ~/
 
 # Add to system keychain
 sudo security add-trusted-cert -d -r trustRoot -k /Library/Keychains/System.keychain ~/gitlab.luciverse.local.crt
@@ -211,7 +211,7 @@ mkcert -install
 
 # Generate certificates
 cd /opt/gitlab/config/ssl
-sudo mkcert -key-file gitlab.luciverse.local.key -cert-file gitlab.luciverse.local.crt gitlab.luciverse.local gitlab 192.168.1.146 localhost
+sudo mkcert -key-file gitlab.luciverse.local.key -cert-file gitlab.luciverse.local.crt gitlab.luciverse.local gitlab 192.168.1.145 localhost
 ```
 
 Then follow Step 2-4 above.
@@ -279,7 +279,7 @@ git remote set-url origin https://gitlab.luciverse.local/luciverse/repo-name.git
 ### API Calls
 ```bash
 # Old
-curl "http://192.168.1.146/api/v4/..."
+curl "http://192.168.1.145/api/v4/..."
 
 # New
 curl "https://gitlab.luciverse.local/api/v4/..."

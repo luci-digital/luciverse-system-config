@@ -277,13 +277,13 @@ source ~/.zshrc && genesis-bond-check
 luciverse-health
 
 # GitLab
-curl -I http://192.168.1.146
+curl -I http://192.168.1.145
 
 # MindsDB
-curl http://192.168.1.146:47334/api/status
+curl http://192.168.1.145:47334/api/status
 
 # Qdrant
-curl http://192.168.1.146:6333/health
+curl http://192.168.1.145:6333/health
 
 # FoundationDB
 fdbcli --exec "status minimal"

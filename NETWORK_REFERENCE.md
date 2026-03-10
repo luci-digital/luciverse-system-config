@@ -461,9 +461,9 @@ docker exec bird2 birdc show route export he_tunnel
 |--------|------|------|---------------|--------|
 | **R730 ORION** | 192.168.1.141 | 2602:F674:0001::1/64 | D0:94:66:24:96:7E | Awaiting boot |
 | **R630 JMRZDB2** | 192.168.1.182 | - | 64:00:6A:C4:10:F0 (iDRAC) | iDRAC accessible |
-| Zbook | 192.168.1.146 | 2602:F674:0001::146/64 | - | Provisioning server |
+| Zbook | 192.168.1.145 | 2602:F674:0001::146/64 | - | Provisioning server |
 | Synology | 192.168.1.251 | 2602:F674:0001::251/64 | - | Storage |
-| Mac Mini | 192.168.1.238 | 2602:F674:0001::238/64 | - | LuciaAI (decommissioning) |
+| Mac Mini | 192.168.1.163 | 2602:F674:0001::238/64 | - | LuciaAI (decommissioning) |
 | ZimaCube-Primary | 192.168.1.152 | - | - | PAC intake node |
 | ZimaCube-Secondary | 192.168.1.200 | - | - | Pending verification |
 
@@ -491,7 +491,7 @@ journalctl -u luciverse-provision -f
 
 ### PXE Boot Sequence
 1. Server boots from network, gets TFTP files from zbook
-2. Runs: `curl http://192.168.1.146:8000/scripts/bootstrap.sh | bash`
+2. Runs: `curl http://192.168.1.145:8000/scripts/bootstrap.sh | bash`
 3. Server registers MAC with provisioning listener
 4. Custom NixOS config generated based on MAC->IPv6 mapping
 

@@ -12,8 +12,8 @@
 
 MindsDB is now running:
 - ✅ Container: mindsdb-luciverse
-- ✅ HTTP API: http://192.168.1.146:47334
-- ✅ Web UI: http://192.168.1.146:47334 (MindsDB Studio)
+- ✅ HTTP API: http://192.168.1.145:47334
+- ✅ Web UI: http://192.168.1.145:47334 (MindsDB Studio)
 - ✅ MySQL API: Port 47335
 - ✅ MongoDB API: Port 47336
 - ✅ PostgreSQL API: Port 47337
@@ -27,10 +27,10 @@ MindsDB is now running:
 
 ```bash
 # Web Interface
-open http://192.168.1.146:47334
+open http://192.168.1.145:47334
 
 # API Status
-curl http://192.168.1.146:47334/api/status | python3 -m json.tool
+curl http://192.168.1.145:47334/api/status | python3 -m json.tool
 
 # Container Logs
 sg docker -c 'docker logs mindsdb-luciverse -f'
@@ -72,7 +72,7 @@ def store_prediction(tr, agent_name: str, prediction_data: dict):
 
 # Make prediction via MindsDB
 response = requests.post(
-    'http://192.168.1.146:47334/api/sql/query',
+    'http://192.168.1.145:47334/api/sql/query',
     json={'query': 'SELECT * FROM my_model WHERE input_col=123'}
 )
 
@@ -165,7 +165,7 @@ def create_agent_behavior_model():
     """
 
     response = requests.post(
-        'http://192.168.1.146:47334/api/sql/query',
+        'http://192.168.1.145:47334/api/sql/query',
         json={'query': create_model_query}
     )
 
@@ -206,7 +206,7 @@ class AgentOptimizer:
     """Use MindsDB to optimize agent performance in real-time"""
 
     def __init__(self):
-        self.mindsdb_url = "http://192.168.1.146:47334"
+        self.mindsdb_url = "http://192.168.1.145:47334"
 
     async def predict_optimal_temperature(self, agent_name: str, message_type: str):
         """Predict optimal temperature parameter for agent"""
@@ -314,14 +314,14 @@ PREDICT optimal_temperature
 
 ### Query Endpoint
 ```bash
-curl -X POST http://192.168.1.146:47334/api/sql/query \
+curl -X POST http://192.168.1.145:47334/api/sql/query \
   -H "Content-Type: application/json" \
   -d '{"query": "SELECT * FROM mindsdb.models"}'
 ```
 
 ### Create Model
 ```bash
-curl -X POST http://192.168.1.146:47334/api/sql/query \
+curl -X POST http://192.168.1.145:47334/api/sql/query \
   -H "Content-Type: application/json" \
   -d '{
     "query": "CREATE MODEL my_model FROM csv_data PREDICT target_column"
@@ -330,7 +330,7 @@ curl -X POST http://192.168.1.146:47334/api/sql/query \
 
 ### Get Prediction
 ```bash
-curl -X POST http://192.168.1.146:47334/api/sql/query \
+curl -X POST http://192.168.1.145:47334/api/sql/query \
   -H "Content-Type: application/json" \
   -d '{
     "query": "SELECT * FROM my_model WHERE input_column = 123"
@@ -366,7 +366,7 @@ SELECT * FROM gitlab_integration.projects;
 CREATE DATABASE ipfs_integration
 WITH ENGINE = 'rest_api',
 PARAMETERS = {
-    "url": "http://192.168.1.146:9094/api/v0",
+    "url": "http://192.168.1.145:9094/api/v0",
     "method": "POST"
 };
 ```
@@ -377,14 +377,14 @@ PARAMETERS = {
 
 ### Check Models
 ```bash
-curl -s http://192.168.1.146:47334/api/sql/query \
+curl -s http://192.168.1.145:47334/api/sql/query \
   -H "Content-Type: application/json" \
   -d '{"query": "SELECT * FROM mindsdb.models"}' | python3 -m json.tool
 ```
 
 ### View Integrations
 ```bash
-curl -s http://192.168.1.146:47334/api/sql/query \
+curl -s http://192.168.1.145:47334/api/sql/query \
   -H "Content-Type: application/json" \
   -d '{"query": "SELECT * FROM mindsdb.datasources"}' | python3 -m json.tool
 ```
@@ -603,7 +603,7 @@ print("Export complete: knowledge_embeddings.csv")
 
 ## Resources
 
-- **Web UI**: http://192.168.1.146:47334
+- **Web UI**: http://192.168.1.145:47334
 - **API Docs**: https://docs.mindsdb.com/api/overview
 - **SQL Guide**: https://docs.mindsdb.com/sql/overview
 - **Integrations**: https://docs.mindsdb.com/integrations/overview

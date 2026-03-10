@@ -105,7 +105,7 @@ These were listed as pending but are now DONE:
 #### 7. DNS & HTTPS
 - [ ] **Configure DNS for gitlab.luciverse.local**
   - Status: NOT STARTED
-  - Current: Using IP address (192.168.1.146)
+  - Current: Using IP address (192.168.1.145)
   - Impact: Better accessibility
   - Estimated effort: 30 minutes
 

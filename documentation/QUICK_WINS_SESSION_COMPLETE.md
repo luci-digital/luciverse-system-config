@@ -37,7 +37,7 @@ Following the recommendation from PENDING_TASKS_AUDIT.md, all "Quick Wins" (Opti
 ```
 Container: gitlab-luciverse
 Status: healthy
-URL: http://192.168.1.146
+URL: http://192.168.1.145
 Ports: 80, 443, 2222 (SSH), 5050 (Registry), 8095 (Pages), 9091 (Prometheus)
 Version: GitLab EE 18.5.2
 ```
@@ -68,7 +68,7 @@ Name: luciverse-docker-runner
 Tags: luciverse, docker, genesis-bond
 Status: registered and running
 Token: glrtr-wfDuy9eyu7juij8j-CCw
-URL: http://192.168.1.146
+URL: http://192.168.1.145
 Run Untagged: true
 Network Mode: luciverse-network
 ```
@@ -85,7 +85,7 @@ Network Mode: luciverse-network
 **Verification**:
 ```bash
 sg docker -c 'docker exec gitlab-runner gitlab-runner list'
-# Output: luciverse-docker-runner | Executor=docker | Token=glrtr-**** | URL=http://192.168.1.146
+# Output: luciverse-docker-runner | Executor=docker | Token=glrtr-**** | URL=http://192.168.1.145
 ```
 
 ---
@@ -126,7 +126,7 @@ Host Network: 📝 DOCUMENTED
 5. systemd-resolved configuration
 
 **Current Access**:
-- ✅ IP: http://192.168.1.146
+- ✅ IP: http://192.168.1.145
 - ✅ Container: http://gitlab-luciverse (within luciverse-network)
 - ⏳ Hostname: Prepared (manual configuration required)
 
@@ -150,7 +150,7 @@ Host Network: 📝 DOCUMENTED
 Script: generate-gitlab-ssl.sh (ready to run with sudo)
 Certificate Type: Self-signed (RSA 4096-bit)
 Validity: 10 years (3650 days)
-SANs: gitlab.luciverse.local, gitlab, 192.168.1.146, localhost
+SANs: gitlab.luciverse.local, gitlab, 192.168.1.145, localhost
 Protocols: TLS 1.2, TLS 1.3
 Implementation: Requires sudo + GitLab restart (2-3 min downtime)
 ```
@@ -212,7 +212,7 @@ Resources:
 
 **API Verification**:
 ```bash
-curl http://192.168.1.146:47334/api/status
+curl http://192.168.1.145:47334/api/status
 # {
 #   "mindsdb_version": "25.10.1",
 #   "environment": "local",
@@ -220,7 +220,7 @@ curl http://192.168.1.146:47334/api/status
 # }
 ```
 
-**Web UI**: ✅ http://192.168.1.146:47334 (MindsDB Studio accessible)
+**Web UI**: ✅ http://192.168.1.145:47334 (MindsDB Studio accessible)
 
 **Files Created**:
 - `/home/daryl/luciverse-platform/docker-compose.mindsdb.yml`
@@ -496,14 +496,14 @@ With Quick Wins complete, we can now tackle:
 
 ```bash
 # GitLab
-curl -I http://192.168.1.146
+curl -I http://192.168.1.145
 sg docker -c 'docker exec gitlab-luciverse gitlab-ctl status'
 
 # GitLab Runner
 sg docker -c 'docker exec gitlab-runner gitlab-runner list'
 
 # MindsDB
-curl http://192.168.1.146:47334/api/status | python3 -m json.tool
+curl http://192.168.1.145:47334/api/status | python3 -m json.tool
 
 # Obsidian Sync Status
 cat /home/daryl/luciverse-platform/obsidian-sync.log | tail -20

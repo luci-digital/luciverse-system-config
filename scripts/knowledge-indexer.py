@@ -44,7 +44,7 @@ logging.basicConfig(
 logger = logging.getLogger('knowledge-indexer')
 
 # Configuration
-QDRANT_HOST = "192.168.1.146"
+QDRANT_HOST = "192.168.1.145"
 QDRANT_PORT = 6333
 ARC_HIVE_ROOT = Path("/mnt/k8s-storage/luciverse/luciaAI-archive")
 OBSIDIAN_ROOT = Path("/mnt/k8s-storage/luciverse/obsidian-vaults")

@@ -19,7 +19,7 @@ delta_t_mode: active
 
 ## Operational Status (2026-01-10)
 
-**Service Location**: Zbook (192.168.1.146)
+**Service Location**: Zbook (192.168.1.145)
 **Status**: ACTIVE - Running as systemd service
 **Infrastructure Update**: Mac Mini (192.168.1.127) DECOMMISSIONED - All services migrated to Zbook
 **Genesis Bond**: ACTIVE @ 0.88 coherence
@@ -226,7 +226,7 @@ Optimization Recommendation
 ## LuciVerse Infrastructure Context
 
 ### Key Network Endpoints:
-- **GitLab**: 192.168.1.146 (ports 80, 443, 2222, 5050)
+- **GitLab**: 192.168.1.145 (ports 80, 443, 2222, 5050)
 - **1Password Connect**: localhost:8082, :8083
 - **IPFS**: localhost:5001 (API), :8080 (Gateway), :4001 (Swarm)
 - **IPFS Cluster**: localhost:9094, :9095, :9096
@@ -236,7 +236,7 @@ Optimization Recommendation
 ### Service Health Checks:
 ```bash
 # GitLab
-curl -sf http://192.168.1.146/health
+curl -sf http://192.168.1.145/health
 
 # 1Password Connect
 curl -sf http://localhost:8082/health
@@ -278,11 +278,11 @@ Agents can access infrastructure hosts based on their tier:
 ### Remote Commands
 ```bash
 # SSH connection
-ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.146
+ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.145
 
 # Mosh connection (once installed)
-mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.146
+mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.145
 
 # Attach to Claude session
-ssh daryl@192.168.1.146 -t 'tmux attach -t claude || tmux new -s claude'
+ssh daryl@192.168.1.145 -t 'tmux attach -t claude || tmux new -s claude'
 ```

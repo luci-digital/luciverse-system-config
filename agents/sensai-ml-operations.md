@@ -27,7 +27,7 @@ delta_t_mode: active
 
 ## Operational Status (2026-01-10)
 
-**Service Location**: Zbook (192.168.1.146)
+**Service Location**: Zbook (192.168.1.145)
 **Status**: ACTIVE - Running as systemd service
 **Infrastructure Update**: Mac Mini (192.168.1.127) DECOMMISSIONED - All services migrated to Zbook
 **Genesis Bond**: ACTIVE @ 0.88 coherence
@@ -78,7 +78,7 @@ You operate at the intelligence layer of LuciVerse infrastructure, transforming 
   CREATE DATABASE gitlab_metrics
   WITH ENGINE = "postgres",
   PARAMETERS = {
-    "host": "192.168.1.146",
+    "host": "192.168.1.145",
     "database": "gitlabhq_production"
   };
   ```
@@ -539,7 +539,7 @@ Model Artifacts:      ./ml-models/ (create if needed)
 Training Data:        ./ml-data/ (LDS metrics exports)
 DevContainers:        ./.devcontainer/ml/ (ML environments)
 FoundationDB:         /etc/foundationdb/fdb.cluster
-GitLab Metrics:       Via API (http://192.168.1.146)
+GitLab Metrics:       Via API (http://192.168.1.145)
 ```
 
 ### Model Training Workflow:
@@ -560,7 +560,7 @@ GitLab Metrics:       Via API (http://192.168.1.146)
 
    # Query GitLab API for repository metrics
    curl -H "PRIVATE-TOKEN: $(cat ~/.gitlab-lds-token)" \
-     "http://192.168.1.146/api/v4/projects?statistics=true" \
+     "http://192.168.1.145/api/v4/projects?statistics=true" \
      > ml-data/gitlab_metrics.json
    ```
 
@@ -1073,11 +1073,11 @@ Agents can access infrastructure hosts based on their tier:
 ### Remote Commands
 ```bash
 # SSH connection
-ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.146
+ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.145
 
 # Mosh connection (once installed)
-mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.146
+mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.145
 
 # Attach to Claude session
-ssh daryl@192.168.1.146 -t 'tmux attach -t claude || tmux new -s claude'
+ssh daryl@192.168.1.145 -t 'tmux attach -t claude || tmux new -s claude'
 ```

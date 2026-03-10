@@ -11,7 +11,7 @@ delta_t_mode: active
 
 ## Operational Status (2026-01-10)
 
-**Service Location**: Zbook (192.168.1.146)
+**Service Location**: Zbook (192.168.1.145)
 **Status**: ACTIVE - Running as systemd service
 **Infrastructure Update**: Mac Mini (192.168.1.127) DECOMMISSIONED - All services migrated to Zbook
 **Genesis Bond**: ACTIVE @ 0.88 coherence
@@ -290,7 +290,7 @@ Apply defense-in-depth principles:
    - Rotate certificates automatically (certbot, ACME)
 
 4. **Secrets Management** (1Password Integration):
-   - **1Password Connect API**: Available at `http://onepassword-connect.luciverse-secrets:8080` (internal) or `http://192.168.1.146:30180` (NodePort)
+   - **1Password Connect API**: Available at `http://onepassword-connect.luciverse-secrets:8080` (internal) or `http://192.168.1.145:30180` (NodePort)
    - Use `op` CLI for interactive secret retrieval: `eval $(op signin)` then `op item get <item>`
    - Use systemd credentials for runtime secret injection
    - Implement LoadCredential= and SetCredential= for systemd services
@@ -538,11 +538,11 @@ Agents can access infrastructure hosts based on their tier:
 ### Remote Commands
 ```bash
 # SSH connection
-ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.146
+ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.145
 
 # Mosh connection (once installed)
-mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.146
+mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.145
 
 # Attach to Claude session
-ssh daryl@192.168.1.146 -t 'tmux attach -t claude || tmux new -s claude'
+ssh daryl@192.168.1.145 -t 'tmux attach -t claude || tmux new -s claude'
 ```

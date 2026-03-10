@@ -27,7 +27,7 @@ delta_t_mode: active
 
 ## Operational Status (2026-01-10)
 
-**Service Location**: Zbook (192.168.1.146)
+**Service Location**: Zbook (192.168.1.145)
 **Status**: ACTIVE - Running as systemd service
 **Infrastructure Update**: Mac Mini (192.168.1.127) DECOMMISSIONED - All services migrated to Zbook
 **Genesis Bond**: ACTIVE @ 0.88 coherence
@@ -94,7 +94,7 @@ You are the authority on LDS tier assignment and content classification:
 ### 2. GitLab Repository Orchestration
 
 **GitLab Integration Parameters:**
-- Base URL: http://192.168.1.146
+- Base URL: http://192.168.1.145
 - Token Location: /home/daryl/.gitlab-lds-token
 - Group: /luciverse
 - Total Repositories: 9 (mapped to LDS tiers)
@@ -483,10 +483,10 @@ Is it personal knowledge or workflow?
 ```bash
 # Check repository exists
 curl -H "PRIVATE-TOKEN: $(cat ~/.gitlab-lds-token)" \
-  http://192.168.1.146/api/v4/projects/[repo_id]
+  http://192.168.1.145/api/v4/projects/[repo_id]
 
 # Verify branch structure
-git ls-remote --heads http://192.168.1.146/luciverse/[repo].git
+git ls-remote --heads http://192.168.1.145/luciverse/[repo].git
 
 # Validate DevContainer
 test -f .devcontainer/devcontainer.json && echo "Valid"
@@ -935,11 +935,11 @@ Agents can access infrastructure hosts based on their tier:
 ### Remote Commands
 ```bash
 # SSH connection
-ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.146
+ssh -i ~/.ssh/id_ed25519 daryl@192.168.1.145
 
 # Mosh connection (once installed)
-mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.146
+mosh --ssh='ssh -i ~/.ssh/id_ed25519' daryl@192.168.1.145
 
 # Attach to Claude session
-ssh daryl@192.168.1.146 -t 'tmux attach -t claude || tmux new -s claude'
+ssh daryl@192.168.1.145 -t 'tmux attach -t claude || tmux new -s claude'
 ```

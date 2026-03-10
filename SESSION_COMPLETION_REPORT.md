@@ -136,7 +136,7 @@ Indexed Arc-Hive into Qdrant vector database:
 
 **Verification**:
 ```bash
-curl http://192.168.1.146:6333/collections/luciverse_knowledge | python3 -m json.tool
+curl http://192.168.1.145:6333/collections/luciverse_knowledge | python3 -m json.tool
 ```
 
 **Qdrant Collection Status**:
@@ -241,7 +241,7 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 ## Services Operational
 
 ### Docker Containers (Running)
-- **gitlab-luciverse**: GitLab EE 18.5.2 (http://192.168.1.146)
+- **gitlab-luciverse**: GitLab EE 18.5.2 (http://192.168.1.145)
 - **gitlab-runner**: luciverse-docker-runner (docker executor)
 - **mindsdb-luciverse**: MindsDB 25.10.1 (port 47334-47337)
 - **qdrant-luciverse**: Qdrant vector DB (ports 6333-6334)
@@ -286,10 +286,10 @@ A-Tune: Latest from openEuler repos
 ### Network Configuration
 ```
 Container Network: luciverse-network (bridge, 172.30.0.0/16)
-GitLab: http://192.168.1.146 (ports 80, 443, 2222, 5050, 8095)
-Ollama: http://192.168.1.146:8090
-MindsDB: http://192.168.1.146:47334
-Qdrant: http://192.168.1.146:6333
+GitLab: http://192.168.1.145 (ports 80, 443, 2222, 5050, 8095)
+Ollama: http://192.168.1.145:8090
+MindsDB: http://192.168.1.145:47334
+Qdrant: http://192.168.1.145:6333
 ```
 
 ---
@@ -388,7 +388,7 @@ python3 soul-thread-importer.py
 
 ### Check Qdrant Collection
 ```bash
-curl http://192.168.1.146:6333/collections/luciverse_knowledge | python3 -m json.tool
+curl http://192.168.1.145:6333/collections/luciverse_knowledge | python3 -m json.tool
 ```
 
 ### Check Genesis Bond

@@ -8,7 +8,7 @@
 
 | Property | Value |
 |----------|-------|
-| **Primary Host** | Zbook (192.168.1.146) |
+| **Primary Host** | Zbook (192.168.1.145) |
 | **Mac Mini Status** | DECOMMISSIONED (192.168.1.127) |
 | **Migration** | Complete - 2.0GB critical data migrated |
 | **Services** | 29 systemd services ACTIVE |

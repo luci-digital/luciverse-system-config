@@ -109,9 +109,9 @@ python3 scripts/agent-orchestrator.py
 # Check all services
 sg docker -c 'docker ps'
 
-# GitLab: http://192.168.1.146
-# MindsDB: http://192.168.1.146:47334
-# Qdrant: http://192.168.1.146:6333
+# GitLab: http://192.168.1.145
+# MindsDB: http://192.168.1.145:47334
+# Qdrant: http://192.168.1.145:6333
 ```
 
 ---

@@ -43,7 +43,7 @@ subjectAltName = @alt_names
 DNS.1 = ${DOMAIN}
 DNS.2 = gitlab
 DNS.3 = localhost
-IP.1 = 192.168.1.146
+IP.1 = 192.168.1.145
 IP.2 = 127.0.0.1
 EOF
 

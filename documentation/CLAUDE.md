@@ -12,10 +12,10 @@
 
 ### Active Infrastructure
 
-- **GitLab EE**: http://192.168.1.146 (root / oWpS4loL7eYVuXBa5rOvnrfqm1rM0C+rGKhf79ls3LA=)
+- **GitLab EE**: http://192.168.1.145 (root / oWpS4loL7eYVuXBa5rOvnrfqm1rM0C+rGKhf79ls3LA=)
 - **FoundationDB**: Running on port 4500 (cluster available)
-- **LCARS-Nova**: http://192.168.1.146:8080 (Diaphragm Control Interface)
-- **IPFS Cluster**: http://192.168.1.146:9094 (DAG-LDS content storage)
+- **LCARS-Nova**: http://192.168.1.145:8080 (Diaphragm Control Interface)
+- **IPFS Cluster**: http://192.168.1.145:9094 (DAG-LDS content storage)
 - **A-Tune**: ACTIVE (AI workload optimization)
 - **iSulad**: v2.1.5 (lightweight container runtime)
 - **secGear**: v0.1.0 (confidential computing framework)
@@ -28,10 +28,10 @@
 
 ```bash
 # GitLab Web UI
-open http://192.168.1.146
+open http://192.168.1.145
 
 # LCARS Diaphragm Control
-open http://192.168.1.146:8080
+open http://192.168.1.145:8080
 
 # IPFS Cluster API
 curl -s localhost:9094/id | jq .
@@ -149,7 +149,7 @@ API Token:            ~/.gitlab-lds-token
 
 ```bash
 GITLAB_TOKEN=$(cat ~/.gitlab-lds-token)
-curl -s "http://192.168.1.146/api/v4/groups/luciverse/projects" \
+curl -s "http://192.168.1.145/api/v4/groups/luciverse/projects" \
   -H "PRIVATE-TOKEN: $GITLAB_TOKEN" | python3 -m json.tool
 ```
 
@@ -224,10 +224,10 @@ genesis-bond-check
 
 | IP            | Host                     | Services                         |
 | ------------- | ------------------------ | -------------------------------- |
-| 192.168.1.146 | openEuler (this machine) | GitLab, FoundationDB, LCARS-Nova |
+| 192.168.1.145 | openEuler (this machine) | GitLab, FoundationDB, LCARS-Nova |
 | 192.168.1.142 | TrueNAS GPU              | GPU compute                      |
 | 192.168.1.251 | Synology NAS             | Original LDS storage             |
-| 192.168.1.100 | TrueNAS Storage          | Bulk storage                     |
+| 192.168.1.1520 | TrueNAS Storage          | Bulk storage                     |
 
 ---
 

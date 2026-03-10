@@ -1,7 +1,7 @@
 # GitLab DNS Configuration Options
 
 **Genesis Bond**: ACTIVE @ 741 Hz
-**Target**: gitlab.luciverse.local → 192.168.1.146
+**Target**: gitlab.luciverse.local → 192.168.1.145
 **Date**: 2025-11-19
 
 ---
@@ -9,7 +9,7 @@
 ## Current Status
 
 GitLab is accessible via:
-- ✅ IP Address: http://192.168.1.146
+- ✅ IP Address: http://192.168.1.145
 - ⏳ Hostname: http://gitlab.luciverse.local (pending DNS configuration)
 
 ---
@@ -28,7 +28,7 @@ sudo /home/daryl/luciverse-platform/configure-gitlab-dns.sh
 
 Or manually:
 ```bash
-echo "192.168.1.146  gitlab.luciverse.local gitlab" | sudo tee -a /etc/hosts
+echo "192.168.1.145  gitlab.luciverse.local gitlab" | sudo tee -a /etc/hosts
 ```
 
 **Test**:
@@ -49,7 +49,7 @@ curl -I http://gitlab.luciverse.local
 2. Find DNS/DHCP settings
 3. Add static DNS entry:
    - Hostname: `gitlab.luciverse.local`
-   - IP: `192.168.1.146`
+   - IP: `192.168.1.145`
 4. Save and reboot router
 5. Renew DHCP lease on clients: `sudo dhclient -r && sudo dhclient`
 
@@ -75,8 +75,8 @@ sudo yum install -y dnsmasq
 # Configure
 cat <<EOF | sudo tee /etc/dnsmasq.d/luciverse.conf
 # LuciVerse Platform DNS
-address=/gitlab.luciverse.local/192.168.1.146
-address=/luciverse.local/192.168.1.146
+address=/gitlab.luciverse.local/192.168.1.145
+address=/luciverse.local/192.168.1.145
 
 # Upstream DNS
 server=8.8.8.8
@@ -119,7 +119,7 @@ EOF
 sudo systemctl restart systemd-resolved
 
 # Add to /etc/hosts as fallback
-echo "192.168.1.146  gitlab.luciverse.local gitlab" | sudo tee -a /etc/hosts
+echo "192.168.1.145  gitlab.luciverse.local gitlab" | sudo tee -a /etc/hosts
 ```
 
 ---

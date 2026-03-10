@@ -38,11 +38,11 @@
 
 ## ✅ Quick Wins Completed (This Session)
 
-1. **GitLab Infrastructure** - ✅ Started successfully @ http://192.168.1.146
+1. **GitLab Infrastructure** - ✅ Started successfully @ http://192.168.1.145
 2. **GitLab Runner** - ✅ Registered: luciverse-docker-runner (Docker executor)
 3. **DNS Configuration** - ✅ Scripts + docs created (container network working)
 4. **HTTPS/TLS** - ✅ Scripts + docs created (ready for deployment)
-5. **MindsDB** - ✅ Deployed v25.10.1 @ http://192.168.1.146:47334
+5. **MindsDB** - ✅ Deployed v25.10.1 @ http://192.168.1.145:47334
 6. **Obsidian Sync** - ✅ Infrastructure ready (vault search running)
 
 **Time**: 3.5 hours | **Success Rate**: 100% | **Files Created**: 14 (4,500+ lines)
@@ -94,10 +94,10 @@
 sg docker -c 'docker ps'
 
 # GitLab
-curl -I http://192.168.1.146
+curl -I http://192.168.1.145
 
 # MindsDB
-curl http://192.168.1.146:47334/api/status | python3 -m json.tool
+curl http://192.168.1.145:47334/api/status | python3 -m json.tool
 
 # Arc-Hive progress
 tail -20 /home/daryl/luciverse-platform/luciaAI-smb-sync.log
