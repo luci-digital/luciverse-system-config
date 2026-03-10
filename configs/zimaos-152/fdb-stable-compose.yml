@@ -1,0 +1,26 @@
+name: fdb-server-fdb-server-1
+services:
+    fdb-server-fdb-server-1:
+        entrypoint:
+            - /usr/bin/tini
+            - -g
+            - --
+            - /bin/bash
+            - -c
+            - "mkdir -p /var/fdb && echo docker:docker@192.168.1.152:4500 > /var/fdb/fdb.cluster && fdbserver --listen-address 0.0.0.0:4500 --public-address 192.168.1.152:4500 --datadir /var/fdb/data --logdir /var/fdb/logs --locality-zoneid=ZIMA --locality-machineid=ZIMA --class storage"
+        environment:
+            FDB_CLUSTER_FILE: /var/fdb/fdb.cluster
+            FDB_CLUSTER_FILE_CONTENTS: ""
+            FDB_COORDINATOR: ""
+            FDB_COORDINATOR_PORT: "4500"
+            FDB_NETWORKING_MODE: host
+            FDB_PORT: "4500"
+            FDB_PROCESS_CLASS: storage
+            PATH: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+        image: foundationdb/foundationdb:7.3.35
+        network_mode: host
+        restart: always
+        volumes:
+            - type: bind
+              source: /var/lib/docker/volumes/a1738554136029249e658e4dff0cc101ece4d222f45dbf770e834ef974c166ff/_data
+              target: /var/fdb/data

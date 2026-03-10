@@ -1,0 +1,41 @@
+services:
+  unifi-db:
+    image: mongo:4.4
+    container_name: unifi-db-stable
+    restart: always
+    volumes:
+      - /DATA/AppData/uosserver/db:/data/db
+    networks:
+      unifi_net:
+        ipv4_address: 172.16.1.3
+
+  unifi-network-application:
+    image: lscr.io/linuxserver/unifi-network-application:latest
+    container_name: unifi-stable
+    restart: always
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - MONGO_USER=unifi
+      - MONGO_PASS=unifi
+      - MONGO_HOST=172.16.1.3
+      - MONGO_PORT=27017
+      - MONGO_DBNAME=unifi
+    volumes:
+      - /DATA/AppData/uosserver/config:/config
+    networks:
+      unifi_net:
+        ipv4_address: 172.16.1.2
+    depends_on:
+      - unifi-db
+
+networks:
+  unifi_net:
+    driver: macvlan
+    driver_opts:
+      parent: eth0
+    ipam:
+      config:
+        - subnet: 172.16.1.0/24
+          gateway: 172.16.1.1
