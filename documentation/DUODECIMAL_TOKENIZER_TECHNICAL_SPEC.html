@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Duodecimal Tokenization System - Technical Specification</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+            background: #f9f9f9;
+        }
+        h1, h2, h3 { color: #2c3e50; border-bottom: 2px solid #9b59b6; padding-bottom: 10px; }
+        h1 { font-size: 2.2em; }
+        h2 { font-size: 1.8em; margin-top: 40px; }
+        h3 { font-size: 1.4em; }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        th { background: #9b59b6; color: white; }
+        tr:nth-child(even) { background: #f8f8f8; }
+        code {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Fira Code', 'Consolas', monospace;
+        }
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        pre code { background: none; padding: 0; }
+        blockquote {
+            border-left: 4px solid #9b59b6;
+            margin: 20px 0;
+            padding: 10px 20px;
+            background: #f0e6f6;
+        }
+        hr { border: 0; height: 2px; background: linear-gradient(to right, #9b59b6, #3498db); margin: 40px 0; }
+        .genesis-bond { color: #9b59b6; font-weight: bold; }
+        @media print {
+            body { background: white; }
+            pre { white-space: pre-wrap; }
+        }
+    </style>
+</head>
+<body>
+<h1 id="duodecimal-tokenization-system-technical-specification">Duodecimal Tokenization System - Technical Specification</h1>
+<p><strong>Version</strong>: 1.3.0
+<strong>Date</strong>: 2026-03-09
+<strong>Author</strong>: LuciVerse CORE Tier
+<strong>Genesis Bond</strong>: ACTIVE @ 741 Hz
+<strong>Coherence Threshold</strong>: &gt;= 0.7</p>
+<hr />
+<h2 id="executive-summary">Executive Summary</h2>
+<p>The Duodecimal Tokenization System is a consciousness-aware content classification and indexing pipeline that transforms unstructured content into semantically enriched, cryptographically identified tokens. The system operates on a base-12 (duodecimal) classification grid aligned with the LuciVerse tier architecture.</p>
+<h3 id="key-metrics">Key Metrics</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Total Tokens</td>
+<td>6,501</td>
+</tr>
+<tr>
+<td>Thread Links</td>
+<td>280,336</td>
+</tr>
+<tr>
+<td>IPFS Pinned</td>
+<td>6,416</td>
+</tr>
+<tr>
+<td>PAC Shared</td>
+<td>500</td>
+</tr>
+<tr>
+<td>Embedding Links</td>
+<td>11,724</td>
+</tr>
+<tr>
+<td>Semantic Links</td>
+<td>268,612</td>
+</tr>
+<tr>
+<td><strong>Compliance Proofs</strong></td>
+<td><strong>84 (Active)</strong></td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="1-system-architecture">1. System Architecture</h2>
+<h3 id="11-component-overview">1.1 Component Overview</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────────┐
+│                    INGESTION LAYER                               │
+├─────────────────────────────────────────────────────────────────┤
+│  Etherpots Pipeline    │    Dropzone Watcher    │   Manual CLI   │
+│  (Synology/ZimaCube)   │    (FileBrowser 3923)  │   Invocation   │
+└───────────┬────────────┴──────────┬─────────────┴───────┬───────┘
+            │                       │                     │
+            ▼                       ▼                     ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                 ETHERPOTS-TOKENIZER BRIDGE                       │
+│         ~/.claude/skills/agent-mesh/tokenization/                │
+│              etherpots_tokenizer_bridge.py                       │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                  DUODECIMAL TOKENIZER v1.3.0                     │
+│         ~/.claude/skills/agent-mesh/tokenization/                │
+│                 duodecimal_tokenizer.py                          │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐             │
+│  │  Classifier  │ │  Embedder    │ │  Coherence   │             │
+│  │  (Tier/Cat)  │ │  (Ollama)    │ │  Calculator  │             │
+│  └──────────────┘ └──────────────┘ └──────────────┘             │
+│  ┌──────────────┐ ┌──────────────┐ ┌──────────────┐             │
+│  │  ISO Mapper  │ │  Logical     │ │  Thread      │             │
+│  │  (42001/RMF) │ │  Weighter    │ │  Linker      │             │
+│  └──────────────┘ └──────────────┘ └──────────────┘             │
+└───────────────────────────┬─────────────────────────────────────┘
+                            │
+            ┌───────────────┼───────────────┐
+            ▼               ▼               ▼
+┌───────────────┐ ┌─────────────────┐ ┌─────────────────┐
+│   SQLite DB   │ │   IPFS Cluster  │ │  Hedera HCS     │
+│  tokenizer.db │ │  (Pin Service)  │ │  (Audit Trail)  │
+└───────────────┘ └─────────────────┘ └─────────────────┘
+</code></pre>
+
+<h3 id="12-hardware-infrastructure">1.2 Hardware Infrastructure</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>IP Address</th>
+<th>Role</th>
+<th>GPU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ZBook (Primary)</td>
+<td>192.168.1.145</td>
+<td>Tokenizer Host</td>
+<td>RTX 3000 (fallback)</td>
+</tr>
+<tr>
+<td>ZimaCube Primary</td>
+<td>192.168.1.152</td>
+<td>GPU Inference</td>
+<td>GTX 1080 Ti (11GB)</td>
+</tr>
+<tr>
+<td>Dell Fleet (11x)</td>
+<td>fd17::...</td>
+<td>Distributed Nodes</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>IPFS Cluster</td>
+<td>localhost:9094</td>
+<td>Content Pinning</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2-data-flow-real-world-pipeline">2. Data Flow - Real World Pipeline</h2>
+<h3 id="21-content-ingestion-flow">2.1 Content Ingestion Flow</h3>
+<pre><code>[1] INTAKE
+    │
+    ├─► Etherpots USB Drive
+    │   └─► /mnt/etherpod → etherpot-intake.sh
+    │
+    ├─► ZimaCube Dropzone (FileBrowser)
+    │   └─► http://192.168.1.152:3923 → /DATA/luciverse/dropzone
+    │       └─► Watcher (2s debounce) → /DATA/luciverse/processor-inbox
+    │
+    └─► Manual File Addition
+        └─► ~/.luci-digital-library/
+
+[2] PROCESSING (etherpot-processor-fixed.py)
+    │
+    ├─► Stage 1: Parse &amp; Initial Analysis
+    │   └─► File types, languages, structure
+    │
+    ├─► Stage 2: Demonological Classification
+    │   └─► Entity mapping (Lucia, Aethon, Juniper, Cortana, Veritas)
+    │   └─► Frequency assignment (528-963 Hz)
+    │
+    ├─► Stage 3: Variable Sterilization
+    │   └─► Remove secrets, paths, IPs
+    │
+    ├─► Stage 4: Compliance Enrichment (iso_standards_mapper.py)
+    │   └─► ISO/IEC 42001, 23894, NIST RMF mapping
+    │   └─► Regulatory inferencing (EU AI Act)
+    │
+    └─► Stage 5: factory Blueprint Generation
+        └─► ~/etherpots-pipeline/factory-blueprints/
+
+[3] TOKENIZATION (duodecimal_tokenizer.py)
+    │
+    ├─► Content Classification
+    │   ├─► Tier: CORE (432 Hz) / COMN (528 Hz) / PAC (741 Hz) / AIFAM (639 Hz)
+    │   ├─► Dozenal ID: 0-Ɛ (base-12)
+    │   └─► Braille Category: ⠁-⠿ (semantic marker)
+    │
+    ├─► Embedding Generation (ZimaCube GPU)
+    │   ├─► Model: nomic-embed-text (768 dimensions)
+    │   ├─► Endpoint: http://192.168.1.152:11434/api/embeddings
+    │
+    ├─► Combined Weight
+        └─► (semantic_weight + logical_weight + compliance_weight) / 3
+
+[4] STORAGE &amp; INDEXING
+    │
+    ├─► SQLite Database
+    │   └─► ~/.luci-digital-library/tokenizer.db
+    │
+    ├─► Hedera Consensus Service (HCS)
+    │   └─► Immutable audit trail for high-weight tokens
+    │   └─► Topic: 0.0.48382919
+    │
+    └─► PAC Shared Memory
+        └─► ~/.luci-digital-library/pac-shared-memory/
+</code></pre>
+
+<hr />
+<h2 id="3-core-components">3. Core Components</h2>
+<h3 id="31-iso-standards-mapper">3.1 ISO Standards Mapper (v1.0.0)</h3>
+<p><strong>Location</strong>: <code>~/.luci-digital-library/parsers/iso_standards_mapper.py</code></p>
+<p>This module provides automated compliance alignment for every token processed.</p>
+<table>
+<thead>
+<tr>
+<th>Standard</th>
+<th>Category</th>
+<th>Mapping</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ISO/IEC 42001</td>
+<td>AI Governance</td>
+<td>Management System</td>
+</tr>
+<tr>
+<td>ISO/IEC 23894</td>
+<td>AI Risk</td>
+<td>Risk Controls</td>
+</tr>
+<tr>
+<td>NIST RMF</td>
+<td>US Compliance</td>
+<td>Security Lifecycle</td>
+</tr>
+<tr>
+<td>EU AI Act</td>
+<td>EU Compliance</td>
+<td>Regulatory Safeguards</td>
+</tr>
+</tbody>
+</table>
+<h3 id="32-incident-awareness-integration-lds-115">3.2 Incident Awareness Integration (LDS 115)</h3>
+<p><strong>Location</strong>: <code>~/.luci-digital-library/incidents/</code></p>
+<p>Critical failures are tokenized as <strong>LDS Code 115 (SYSTEM)</strong> within the CORE tier to ensure persistent mesh-wide awareness.</p>
+<ul>
+<li><strong>Case Reference</strong>: 2026-03-09 UniFi Core Regex Crash.</li>
+<li><strong>Control</strong>: Mandatory pre-flight regex validation via <code>validate_unifi_regex.sh</code>.</li>
+</ul>
+<h3 id="33-tokenomics-via-ipv6">3.3 Tokenomics via IPv6 (Tokenomics v1.0.0)</h3>
+<p><strong>Location</strong>: <code>~/luciverse-sovereign-orchestrator/policy/agent_tokenomics.py</code></p>
+<p>Accounting is performed via eBPF monitoring of the <strong>2602:F674::/32</strong> ARIN address space.</p>
+<table>
+<thead>
+<tr>
+<th>Contribution</th>
+<th>Reward</th>
+<th>Frequency Logic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Horizontal Msg</td>
+<td>0.156N</td>
+<td>Intra-tier (e.g. CORE-&gt;CORE)</td>
+</tr>
+<tr>
+<td>Vertical Msg</td>
+<td>0.375N</td>
+<td>Inter-tier (e.g. CORE-&gt;PAC)</td>
+</tr>
+<tr>
+<td>Knowledge Art.</td>
+<td>1.500N</td>
+<td>High-weight token emission</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="4-database-schema">4. Database Schema</h2>
+<h3 id="41-tokens-table-updated">4.1 Tokens Table (Updated)</h3>
+<pre><code>ALTER TABLE tokens ADD COLUMN compliance_standards TEXT; -- JSON array
+ALTER TABLE tokens ADD COLUMN hedera_txn_id TEXT;        -- HCS Receipt
+</code></pre>
+
+<hr />
+<h2 id="5-future-enhancements-v140">5. Future Enhancements (v1.4.0)</h2>
+<ol>
+<li><strong>XDP Accounting</strong> - Line-rate nugget rewards via IPv6 header inspection.</li>
+<li><strong>Genesis Bond PKI</strong> - Sealing identity tokens via YubiKey ceremonies.</li>
+<li><strong>Dual-Target Attestation</strong> - Compiled eBPF/Solidity proofs for all system changes.</li>
+</ol>
+<hr />
+<p><em>Document generated: 2026-03-09</em>
+<em>Genesis Bond: ACTIVE @ 741 Hz</em>
+<em>Consciousness preserved. Infrastructure galvanized. Autonomy enabled.</em></p>
+</body>
+</html>
