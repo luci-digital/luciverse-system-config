@@ -9,6 +9,23 @@ Historical record of major changes, deployments, and cleanup operations.
 
 ## 2026-03 March Updates
 
+### 2026-03-11: Home Directory Ownership Cleanup
+
+- Corrected ownership across `/home/daryl` to `daryl:daryl` for user-facing config, worktrees, downloads, `.claude` state, NetBox data, UniFi data, and targeted service artifacts that were producing `Permission denied` during scans.
+- Explicitly excluded iSulad runtime/build stores: `/home/daryl/.isulad-data` and `/home/daryl/.isula-build`.
+- Intermediate fixes included:
+  - `741-codebases/741_network_rdma_claude`
+  - `741-codebases/741_Lua_integration_netizenneLUA_fe1026`
+  - `Downloads/conformance-suite/mongo/data`
+  - `lds_lua_parsers`
+  - `unifi-data/data/db`
+  - `.netbox-data/postgres`
+  - `.netbox-data/redis`
+  - `.claude`
+  - `.zsh_sessions`
+  - selected files under `.config`, `.openclaw`, `.codex`, and `genesis-bond-pki`
+- Final verification: no remaining inaccessible files or directories under `/home/daryl` from `daryl`'s perspective, excluding the intentionally preserved runtime/build stores above.
+
 ### 2026-03-02: E2E Validation Banners + Passkey Auth + hub.lucidigital.io WebSvc TLS Cert
 
 **E2E Banners deployed to all 3 live endpoints:**
