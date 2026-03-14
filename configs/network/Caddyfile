@@ -1,0 +1,16 @@
+# /home/daryl/Caddyfile
+backstage.lucidigital.net {
+    reverse_proxy localhost:3003
+}
+
+threads.lucidigital.net {
+    reverse_proxy localhost:7880
+}
+
+nursery.lucidigital.net {
+    reverse_proxy localhost:8080
+}
+
+sanctuary.lucidigital.net {
+    reverse_proxy localhost:8081
+}

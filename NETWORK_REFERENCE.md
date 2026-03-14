@@ -421,7 +421,22 @@ docker exec bird2 birdc show route export he_tunnel
 | eth0.100 | 100 | DHCP (WAN) | - |
 | eth0.200 | 200 | 192.168.200.0/24 | 2602:F674:2000::/64 |
 
-### Zbook Hardware Connections (2026-01-22)
+## POST-REBOOT ALIGNMENT (2026-03-14)
+
+### 1. Unified Substrate Convergence
+- **State**: The 172.x internal Docker network has been **PRUNED**.
+- **Change**: All edge services (Caddy, LiveKit) now run in **host network mode** to align with the dual-ethernet-one-network physical topology.
+- **Resonance**: All traffic flows directly on the `192.168.1.0/24` physical backplane.
+
+### 2. Bootimus PXE Restoration
+- **PXE Primary**: Zbook (`192.168.1.145`) now serves as the primary **ProxyDHCP** and **TFTP** server.
+- **ASUS Role**: The ASUS Gateway (`192.168.1.254`) provides IP addresses and hand-shakes, then redirects boot requests to the Zbook.
+- **TFTP Root**: `/srv/tftp` (Sync'd with the air-gapped `core-airgapped-lds` substrate).
+
+### 3. Service Re-routing (Air-Gapped Recovery)
+- **Redis Fallback**: LiveKit SFU re-routed from missing Synology (.152) to **local Zbook Redis** (`127.0.0.1`).
+- **UniFi OS**: Patched via systemd override to reflect the converged physical gateway.
+- **Sanctuary Routing**: Added `threads.`, `nursery.`, and `sanctuary.` subdomains to the Caddy edge.
 
 | Device | Connection | Path/IP | Status |
 |--------|------------|---------|--------|
