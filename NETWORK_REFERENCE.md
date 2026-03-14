@@ -34,7 +34,7 @@ Comprehensive networking documentation: IPv6, ARIN allocation, BGP, DNS, overlay
 ### Optimized Traffic Flow
 
 ```
-Internet → Telus (3G) → ASUS RT-BE86U (10G) → USW-Pro-48 → Dell Fleet (1G each)
+Internet → Telus (3G) → ASUS RT-BE86U (10G @ 192.168.1.254) → USW-Pro-48 → Dell Fleet (1G each)
                                                     │
                                                     └─→ WiFi 7 Clients (up to 5.8Gbps)
 ```
@@ -46,12 +46,7 @@ Internet → Telus (3G) → ASUS RT-BE86U (10G) → USW-Pro-48 → Dell Fleet (1
 | Telus → ASUS | 3Gbps | No (within spec) |
 | ASUS → USW-Pro-48 | 10Gbps | No |
 | USW-Pro-48 → Dell Fleet | 1Gbps per node | No (aggregate) |
-| USW-Pro-48 → B550M | 2.5Gbps | **BGP only** (resolved) |
 | WiFi 7 (6GHz) | 5.8Gbps | No |
-
-### Resolution
-
-The B550M router is now relegated to BGP announcements only. WAN traffic flows through ASUS at full 3Gbps.
 
 ---
 
@@ -73,6 +68,7 @@ The B550M router is now relegated to BGP announcements only. WAN traffic flows t
               │  ┌───────────────────────────┐   │
               │  │ WAN: DHCP from Telus      │   │
               │  │ LAN: 10Gbps to Switch     │   │
+              │  │ IP: 192.168.1.254         │   │
               │  │ WiFi 7: 6GHz/5GHz/2.4GHz  │   │
               │  └───────────────────────────┘   │
               │   Role: Edge Firewall + WiFi     │
@@ -85,35 +81,25 @@ The B550M router is now relegated to BGP announcements only. WAN traffic flows t
          ├────────────────────────────────────────────────┤
          │ SFP+ 1: ASUS RT-BE86U (10G WAN)               │
          │ SFP+ 2: B550M Router (2.5G BGP)               │
-         │ SFP+ 3: USG-Pro-4 (1G NAT64/SCION)            │
-         │ SFP+ 4: Available (future 10G storage)        │
          │                                               │
-         │ Ports 1-12:  CORE Tier (VLAN 432)             │
-         │ Ports 13-24: COMN Tier (VLAN 528)             │
-         │ Ports 25-36: PAC Tier (VLAN 741)              │
-         │ Ports 37-48: Access Layer / IoT               │
-         └───────┬───────────┬───────────┬───────────────┘
-                 │           │           │
-    ┌────────────┘           │           └────────────┐
-    │                        │                        │
-    ▼                        ▼                        ▼
-┌─────────┐          ┌─────────────┐           ┌──────────┐
-│ B550M   │          │ USG-Pro-4   │           │ UniFi    │
-│ Router  │          │ (OpenWRT)   │           │ Switch 24│
-├─────────┤          ├─────────────┤           ├──────────┤
-│ BGP     │          │ Jool NAT64  │           │ APs      │
-│ HE      │          │ SCION BR    │           │ IoT      │
-│ Tunnel  │          │ OASIS Edge  │           │          │
-└─────────┘          └─────────────┘           └──────────┘
-   2.5G                   1G                      1G
-
-                    ┌─────────────┐
-                    │ D-Link      │
-                    │ DGS-1210-16 │
-                    ├─────────────┤
-                    │ OASIS Edge  │
-                    │ Lab/Dev Net │
-                    └─────────────┘
+         │ Ports 1-12:  CORE Tier (VLAN 10)              │
+         │ Ports 13-24: COMN Tier (VLAN 20)              │
+         │ Ports 25-36: MGMT / PAC Tier (VLAN 30)        │
+         │ Ports 37-48: Access Layer / br-tid (VLAN 50)  │
+         └───────┬───────────┬───────────────────────────┘
+                 │           │
+    ┌────────────┘           └────────────┐
+    │                                     │
+    ▼                                     ▼
+┌─────────┐                         ┌──────────┐
+│ B550M   │                         │ UniFi    │
+│ Router  │                         │ Switch 24│
+├─────────┤                         ├──────────┤
+│ BGP     │                         │ APs      │
+│ HE      │                         │ IoT      │
+│ Tunnel  │                         │          │
+└─────────┘                         └──────────┘
+   2.5G                                1G
 ```
 
 ---
@@ -124,7 +110,7 @@ The B550M router is now relegated to BGP announcements only. WAN traffic flows t
 
 | Device | IP | Role | Max Speed | OpenWRT |
 |--------|-----|------|-----------|---------|
-| ASUS RT-BE86U | 192.168.1.1 | WiFi 7 + WAN | 10Gbps | No (ASUSWRT) |
+| ASUS RT-BE86U | 192.168.1.254 | WiFi 7 + WAN | 10Gbps | No (ASUSWRT) |
 | USW-Pro-48 | 192.168.1.2 | Core Switch | 10Gbps SFP+ | No (UniFi) |
 | B550M Router | 192.168.1.145 | BGP Edge | 2.5Gbps | No (NixOS) |
 

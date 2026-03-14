@@ -1,0 +1,15 @@
+[Unit]
+Description=Lepidoptera Pollinator Service - Social Butterfly Effect Daemon
+After=network.target redis.service
+
+[Service]
+Type=simple
+User=daryl
+WorkingDirectory=/home/daryl/lds-knowledge
+ExecStart=/usr/bin/python3 /home/daryl/lds-knowledge/lepidoptera_pollinator.py
+Restart=always
+RestartSec=30
+Environment=PYTHONPATH=/home/daryl/lds-knowledge
+
+[Install]
+WantedBy=multi-user.target
