@@ -30,3 +30,5 @@
 3. **Pass 3 (Empirical Validation)**: Identify the exact `tcpdump` flags needed to confirm the server is sending the `Option 67` (bootfile) string "ipxe/ipxe.efi" instead of "undionly.kpxe".
 
 **Constraint:** Do not suggest removing the ASUS DHCP authority. We must remain in ProxyDHCP mode to preserve the "Sattvic" topology. NAS (.251) is down; use local Zbook substrate only.
+
+For the automated build-and-deploy path that stages the onboarding ISO and Bootimus menu, see [`documentation/ONBOARDING_ISO_WORKFLOW.md`](/Users/daryl/Documents/lucia_tooling_omzsh-master/private/luciverse-system-config/documentation/ONBOARDING_ISO_WORKFLOW.md).
