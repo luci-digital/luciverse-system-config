@@ -35,22 +35,27 @@ Complete system and A-Tune configurations for the LuciVerse Consciousness Platfo
 
 ```
 .
+├── bootimus/               # Boot menu and PXE/HTTP staging assets
 ├── docker-compose/          # All Docker Compose configurations
 │   ├── gitlab.yml
 │   ├── mindsdb.yml
 │   ├── qdrant.yml
 │   └── ipfs-cluster.yml
+├── nixos/                  # Onboarding ISO NixOS module
+├── schemas/                # FoundationDB schema manifests
 ├── scripts/                 # Platform automation scripts
 │   ├── knowledge-indexer.py
 │   ├── agent-mesh-router.py
 │   ├── agent-orchestrator.py
 │   ├── luciaAI-smb-sync.py
 │   ├── arc-hive-integrity-validator.py
+│   ├── fdb-hardware-ledger-schema-init.py
 │   └── obsidian-vault-sync.sh
 ├── configs/                 # System configurations
 │   ├── atune/              # A-Tune profiles
 │   ├── foundationdb/       # FDB cluster config
 │   └── systemd/            # Service configurations
+├── justfile                 # Operator task runner for ISO + ledger workflows
 ├── documentation/           # Platform documentation
 │   ├── CLAUDE.md
 │   ├── CURRENT_STATUS.md
@@ -59,7 +64,8 @@ Complete system and A-Tune configurations for the LuciVerse Consciousness Platfo
 │   ├── MINDSDB_INTEGRATION.md
 │   ├── OBSIDIAN_INTEGRATION.md
 │   ├── DNS_CONFIGURATION_OPTIONS.md
-│   └── HTTPS_CONFIGURATION.md
+│   ├── HTTPS_CONFIGURATION.md
+│   └── ONBOARDING_ISO_WORKFLOW.md
 └── README.md               # This file
 ```
 
@@ -113,6 +119,25 @@ sg docker -c 'docker ps'
 # MindsDB: http://192.168.1.145:47334
 # Qdrant: http://192.168.1.145:6333
 ```
+
+### 5. Build the Onboarding ISO
+```bash
+just iso-build
+just iso-stage
+just iso-serve
+```
+
+The staged artifact lives under `dist/bootimus/` and the Bootimus menu stays
+available at `http://192.168.1.145:8000/bootimus/bootimus.ipxe`.
+
+### 6. Initialize the Hardware Ledger
+```bash
+just fdb-ledger-verify
+just fdb-ledger-init
+```
+
+Use `just fdb-ledger-index hardware_dir=hardware hedera_log_dir=hedera-logs`
+to load new hardware manifests and Hedera sequence logs into FoundationDB.
 
 ---
 

@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_name": "luciverse-hardware-ledger",
+  "version": "1.0.0",
+  "namespace": [
+    "luciverse",
+    "hardware"
+  ],
+  "directories": [
+    {
+      "path": [
+        "luciverse",
+        "hardware",
+        "schema"
+      ],
+      "description": "Schema manifest and metadata"
+    },
+    {
+      "path": [
+        "luciverse",
+        "hardware",
+        "issued"
+      ],
+      "description": "Canonical hardware issuance manifests"
+    },
+    {
+      "path": [
+        "luciverse",
+        "hardware",
+        "artifacts"
+      ],
+      "description": "Checksummed hardware bundle artifacts"
+    },
+    {
+      "path": [
+        "luciverse",
+        "hardware",
+        "hedera"
+      ],
+      "description": "Hedera sequence logs linked to hardware issuance"
+    },
+    {
+      "path": [
+        "luciverse",
+        "hardware",
+        "indexes"
+      ],
+      "description": "Lookup indexes for issued hardware and sequence logs"
+    }
+  ],
+  "indexes": [
+    {
+      "name": "by_hardware_id",
+      "path": [
+        "luciverse",
+        "hardware",
+        "indexes",
+        "by_hardware_id"
+      ],
+      "description": "Lookup hardware records by hardware_id"
+    },
+    {
+      "name": "by_serial",
+      "path": [
+        "luciverse",
+        "hardware",
+        "indexes",
+        "by_serial"
+      ],
+      "description": "Lookup hardware records by serial number"
+    },
+    {
+      "name": "by_mac",
+      "path": [
+        "luciverse",
+        "hardware",
+        "indexes",
+        "by_mac"
+      ],
+      "description": "Lookup hardware records by MAC address"
+    },
+    {
+      "name": "by_sequence_id",
+      "path": [
+        "luciverse",
+        "hardware",
+        "indexes",
+        "by_sequence_id"
+      ],
+      "description": "Lookup Hedera sequence logs by sequence id"
+    },
+    {
+      "name": "by_transaction_id",
+      "path": [
+        "luciverse",
+        "hardware",
+        "indexes",
+        "by_transaction_id"
+      ],
+      "description": "Lookup Hedera sequence logs by transaction id"
+    }
+  ],
+  "record_types": [
+    {
+      "name": "hardware_issue",
+      "description": "Issued hardware manifest captured at onboarding time",
+      "required": [
+        "hardware_id",
+        "serial_number",
+        "mac_addresses",
+        "issued_at",
+        "source_file",
+        "checksum",
+        "hedera_sequence_id"
+      ],
+      "fields": {
+        "hardware_id": "Stable hardware identifier for the issued node",
+        "serial_number": "Vendor serial number or asset tag",
+        "mac_addresses": "Array of MAC addresses associated with the platform",
+        "issued_at": "ISO 8601 timestamp for the issuance event",
+        "source_file": "Path to the source hardware file that was indexed",
+        "checksum": "SHA-256 digest of the source hardware file",
+        "hedera_sequence_id": "Primary Hedera sequence identifier",
+        "hedera_transaction_id": "Optional Hedera transaction id",
+        "boot_profile": "Optional boot or PXE profile name",
+        "operator": "Operator or automation identity that issued the record"
+      }
+    },
+    {
+      "name": "hedera_sequence_log",
+      "description": "Hedera sequence record associated with a hardware issue",
+      "required": [
+        "sequence_id",
+        "hardware_id",
+        "timestamp",
+        "status",
+        "source_file"
+      ],
+      "fields": {
+        "sequence_id": "Sequence identifier used for lookup and linkage",
+        "hardware_id": "Hardware record linked to this sequence",
+        "transaction_id": "Hedera transaction id, if available",
+        "timestamp": "ISO 8601 event timestamp",
+        "status": "Sequence state such as pending, confirmed, or failed",
+        "source_file": "Log file or ledger export that produced the record",
+        "payload_hash": "Digest of the raw log payload",
+        "notes": "Free-form operator or automation notes"
+      }
+    }
+  ]
+}
