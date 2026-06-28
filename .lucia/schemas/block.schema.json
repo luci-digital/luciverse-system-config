@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LuciVerse Block",
+  "type": "object",
+  "required": ["addr", "size", "hash_algo", "compression"],
+  "properties": {
+    "addr": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "size": { "type": "integer", "minimum": 0 },
+    "hash_algo": { "type": "string", "enum": ["blake3", "sha256"] },
+    "compression": { "type": "string", "enum": ["zstd", "none"] },
+    "shard": { "type": "string", "pattern": "^[0-9a-f]{2}$" },
+    "lds_tier": { "type": "string" },
+    "frequency_hz": { "type": "integer" },
+    "created_at": { "type": "string", "format": "date-time" }
+  }
+}

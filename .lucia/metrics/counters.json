@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "counters": {
+    "blocks_written": 0,
+    "blocks_read": 0,
+    "threads_created": 0,
+    "threads_resolved": 0,
+    "compactions": 0,
+    "wal_rotations": 0,
+    "peer_syncs": 0
+  }
+}

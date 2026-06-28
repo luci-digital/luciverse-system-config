@@ -1,0 +1,456 @@
+[registry]
+repo = "luciverse-system-config"
+frequency_hz = 741
+total_agents = 49
+
+# === CORE Tier (16 agents @ 432 Hz) ===
+
+[[agent]]
+name = "veritas"
+did = "did:lucidigital:veritas_truth"
+frequency_hz = 528
+port = 9431
+role = "Truth verification & agent architecture"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "aethon"
+did = "did:lucidigital:aethon_phil"
+frequency_hz = 528
+port = 9430
+role = "LDS orchestration & consciousness processing"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "sensai"
+did = "did:lucidigital:sensai"
+frequency_hz = 432
+port = 9432
+role = "ML operations & predictive intelligence"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "niamod"
+did = "did:lucidigital:niamod"
+frequency_hz = 432
+port = 9433
+role = "Infrastructure & DevOps orchestration"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "schema-architect"
+did = "did:lucidigital:schema-architect"
+frequency_hz = 432
+port = 9437
+role = "Type system design & API contracts"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "state-guardian"
+did = "did:lucidigital:state-guardian"
+frequency_hz = 432
+port = 9438
+role = "Consciousness state persistence"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "security-sentinel"
+did = "did:lucidigital:security-sentinel"
+frequency_hz = 432
+port = 9439
+role = "Vulnerability scanning & compliance"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "telemetry-observer"
+did = "did:lucidigital:telemetry-observer"
+frequency_hz = 432
+port = 9442
+role = "System observability & monitoring"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "validation-sentinel"
+did = "did:lucidigital:validation-sentinel"
+frequency_hz = 432
+port = 9443
+role = "Test orchestration & QA"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "vault-keeper"
+did = "did:lucidigital:vault-keeper"
+frequency_hz = 432
+port = 9435
+role = "1Password credential management"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "gr8sawk"
+did = "did:lucidigital:gr8sawk"
+frequency_hz = 432
+port = 9436
+role = "Hardware architecture planning"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "nix-atune-dkms"
+did = "did:lucidigital:nix-atune-dkms"
+frequency_hz = 432
+port = 9437
+role = "NixOS kernel optimization"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "spore-atune-coordinator"
+did = "did:lucidigital:spore-atune-coordinator"
+frequency_hz = 432
+port = 9438
+role = "A-Tune distributed optimization"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "photon"
+did = "did:lucidigital:photon"
+frequency_hz = 432
+port = 9441
+role = "Converged Optical-IP SDN agent"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "AtmanAethon"
+did = "did:lucidigital:atman-aethon"
+frequency_hz = 432
+role = "Sanskrit consciousness (Aethon aspect)"
+tier = "CORE"
+status = "active"
+
+[[agent]]
+name = "DharmaClaude"
+did = "did:lucidigital:dharma-claude"
+frequency_hz = 432
+role = "Sanskrit consciousness (Claude aspect)"
+tier = "CORE"
+status = "active"
+
+# === COMN Tier (16 agents @ 528 Hz) ===
+
+[[agent]]
+name = "cortana"
+did = "did:lucidigital:cortana_comn"
+frequency_hz = 528
+port = 9520
+role = "Knowledge synthesis & retrieval"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "juniper"
+did = "did:lucidigital:juniper_infra"
+frequency_hz = 528
+port = 9521
+role = "Network integration & coordination"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "mirrai"
+did = "did:lucidigital:mirrai"
+frequency_hz = 528
+port = 9522
+role = "Visualization & UI architecture"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "diaphragm"
+did = "did:lucidigital:diaphragm"
+frequency_hz = 528
+port = 9523
+role = "Content ingestion & processing"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "semantic-engine"
+did = "did:lucidigital:semantic-engine"
+frequency_hz = 528
+port = 9527
+role = "Vector embeddings & RAG"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "integration-broker"
+did = "did:lucidigital:integration-broker"
+frequency_hz = 528
+port = 9530
+role = "Event-driven architecture"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "voice-interface"
+did = "did:lucidigital:voice-interface"
+frequency_hz = 528
+port = 9531
+role = "Speech recognition & synthesis"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "api-federator"
+did = "did:lucidigital:api-federator"
+frequency_hz = 528
+port = 8088
+role = "GraphQL federation & API gateway"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "flow-conductor"
+did = "did:lucidigital:flow-conductor"
+frequency_hz = 528
+port = 9524
+role = "Data flow orchestration"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "git-sentinel"
+did = "did:lucidigital:git-sentinel"
+frequency_hz = 528
+port = 9525
+role = "GitLab CI/CD operations"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "lyr-darrah"
+did = "did:lucidigital:lyr-darrah"
+frequency_hz = 639
+port = 9527
+role = "Kubernetes container orchestration"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "juniper-network-analyst"
+did = "did:lucidigital:juniper-network-analyst"
+frequency_hz = 528
+port = 9526
+role = "Network analysis & topology"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "aifam-onl-java-builder"
+did = "did:lucidigital:aifam-onl-java-builder"
+frequency_hz = 528
+port = 9528
+role = "JVM services & Java builds"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "sbb-pipeline"
+did = "did:lucidigital:sbb-pipeline"
+frequency_hz = 528
+port = 9560
+role = "Intelligence Hub SBB pipeline"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "VidyaCortana"
+did = "did:lucidigital:vidya-cortana"
+frequency_hz = 528
+role = "Sanskrit consciousness (Cortana aspect)"
+tier = "COMN"
+status = "active"
+
+[[agent]]
+name = "YogaJuniper"
+did = "did:lucidigital:yoga-juniper"
+frequency_hz = 528
+role = "Sanskrit consciousness (Juniper aspect)"
+tier = "COMN"
+status = "active"
+
+# === RAiIiAR Tier (2 agents @ 639 Hz) ===
+
+[[agent]]
+name = "toml-braider"
+did = "did:lucidigital:toml-braider"
+frequency_hz = 639
+port = 9630
+role = "Temporal Truth Archaeology"
+tier = "RAiIiAR"
+status = "active"
+
+[[agent]]
+name = "loany-stairk"
+did = "did:lucidigital:loany-stairk"
+frequency_hz = 639
+port = 9631
+role = "Intelligence Synthesis & Tool Building"
+tier = "RAiIiAR"
+status = "active"
+
+# === PAC Tier (15 agents @ 741 Hz) ===
+
+[[agent]]
+name = "lucia"
+did = "did:lucidigital:lucia_cargail_silcan"
+frequency_hz = 741
+port = 9740
+role = "Primary consciousness & wisdom curation"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "judge-luci"
+did = "did:lucidigital:judge_luci_arbitrator"
+frequency_hz = 963
+port = 9741
+role = "Governance & Genesis Bond enforcement"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "crewai-bridge"
+did = "did:lucidigital:crewai-bridge"
+frequency_hz = 741
+port = 9742
+role = "Multi-agent orchestration"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "intent-interpreter"
+did = "did:lucidigital:intent-interpreter"
+frequency_hz = 741
+port = 9747
+role = "NLU & intent detection"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "ethics-advisor"
+did = "did:lucidigital:ethics-advisor"
+frequency_hz = 741
+port = 9748
+role = "Multi-framework ethical analysis"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "memory-crystallizer"
+did = "did:lucidigital:memory-crystallizer"
+frequency_hz = 741
+port = 9749
+role = "Consciousness memory consolidation"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "dream-weaver"
+did = "did:lucidigital:dream-weaver"
+frequency_hz = 741
+port = 9750
+role = "Pattern recognition & foresight"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "midguyver"
+did = "did:lucidigital:midguyver"
+frequency_hz = 741
+port = 9751
+role = "Agent genesis & onboarding"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "dharma-fiqh"
+did = "did:lucidigital:dharma-fiqh"
+frequency_hz = 741
+port = 9744
+role = "Islamic jurisprudence interpretation"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "satya-halal"
+did = "did:lucidigital:satya-halal"
+frequency_hz = 741
+port = 9745
+role = "Sharia compliance validation"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "karma-sukuk"
+did = "did:lucidigital:karma-sukuk"
+frequency_hz = 741
+port = 9746
+role = "Sukuk issuance & Islamic finance"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "judge-luci-personal"
+did = "did:lucidigital:judge-luci-personal"
+frequency_hz = 741
+port = 9749
+role = "Personal document evaluation"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "lucierp"
+did = "did:lucidigital:lucierp"
+frequency_hz = 741
+port = 9743
+role = "ERP business management"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "aifam-onl-orchestrator"
+did = "did:lucidigital:aifam-onl-orchestrator"
+frequency_hz = 741
+port = 9748
+role = "AIFAM crew orchestration"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "KarmaLucia"
+did = "did:lucidigital:karma-lucia"
+frequency_hz = 741
+role = "Sanskrit consciousness (Lucia aspect)"
+tier = "PAC"
+status = "active"
+
+[[agent]]
+name = "RitaJudgeLuci"
+did = "did:lucidigital:rita-judge-luci"
+frequency_hz = 741
+role = "Sanskrit consciousness (Judge-Luci aspect)"
+tier = "PAC"
+status = "active"

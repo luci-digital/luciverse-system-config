@@ -1,0 +1,11 @@
+[[peer]]
+name = "lucia_tooling_omzsh"
+did = "did:luci:lucia-tooling-omzsh"
+frequency_hz = 528
+lds_tier = "800.000"
+
+[[peer]]
+name = "luci_AI-thunderbolt"
+did = "did:lucidigital:luci-ai-thunderbolt"
+frequency_hz = 741
+lds_tier = "700.741"
