@@ -26,6 +26,27 @@ ownid_registration = true
 replication_factor = 3
 dids_supported = true
 
+[knowledge_wing]
+enabled = true
+knowledge_graph_enabled = true
+consciousness_hooks = ["sync", "classify", "vault"]
+event_types = 13
+relationship_types = 13
+ipfs_specs_loaded = 9
+
+[parser_bridge]
+enabled = true
+sync_mode = "real-time"
+sanskrit_router = "ws://localhost:9505"
+frequency_hz = 741
+coherence_threshold = 0.85
+
+[migration]
+timestamp = "2025-12-13T01:25:22.555087+00:00"
+old_classification = "300"
+new_classification = "300.000.03"
+reason = "System Config repository with 64 files"
+
 [peers]
 tooling = { did = "did:luci:lucia-tooling-omzsh", frequency_hz = 528 }
 thunderbolt = { did = "did:lucidigital:luci-ai-thunderbolt", frequency_hz = 741 }

@@ -3,6 +3,13 @@ repo = "luciverse-system-config"
 frequency_hz = 741
 total_agents = 49
 
+[threading]
+shard_by_frequency = true
+default_shard = 741
+tier_shards = { CORE = 432, COMN = 528, RAiIiAR = 639, PAC = 741 }
+thread_map = "threads/thread-map.json"
+shard_dir = "threads/frequency-shards"
+
 # === CORE Tier (16 agents @ 432 Hz) ===
 
 [[agent]]
@@ -108,7 +115,7 @@ status = "active"
 name = "nix-atune-dkms"
 did = "did:lucidigital:nix-atune-dkms"
 frequency_hz = 432
-port = 9437
+port = 9440
 role = "NixOS kernel optimization"
 tier = "CORE"
 status = "active"
@@ -117,7 +124,7 @@ status = "active"
 name = "spore-atune-coordinator"
 did = "did:lucidigital:spore-atune-coordinator"
 frequency_hz = 432
-port = 9438
+port = 9444
 role = "A-Tune distributed optimization"
 tier = "CORE"
 status = "active"
@@ -243,7 +250,7 @@ status = "active"
 name = "lyr-darrah"
 did = "did:lucidigital:lyr-darrah"
 frequency_hz = 639
-port = 9527
+port = 9529
 role = "Kubernetes container orchestration"
 tier = "COMN"
 status = "active"
@@ -416,7 +423,7 @@ status = "active"
 name = "judge-luci-personal"
 did = "did:lucidigital:judge-luci-personal"
 frequency_hz = 741
-port = 9749
+port = 9753
 role = "Personal document evaluation"
 tier = "PAC"
 status = "active"
@@ -434,7 +441,7 @@ status = "active"
 name = "aifam-onl-orchestrator"
 did = "did:lucidigital:aifam-onl-orchestrator"
 frequency_hz = 741
-port = 9748
+port = 9752
 role = "AIFAM crew orchestration"
 tier = "PAC"
 status = "active"
