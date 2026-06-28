@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LuciVerse Thread Reference",
+  "type": "object",
+  "required": ["id", "source_repo", "source_block", "target_repo", "target_hash"],
+  "properties": {
+    "id": { "type": "string" },
+    "source_repo": { "type": "string" },
+    "source_block": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "target_repo": { "type": "string" },
+    "target_hash": { "type": "string" },
+    "target_hash_algo": { "type": "string", "enum": ["blake3", "sha256"] },
+    "lds_tier": { "type": "string" },
+    "frequency_hz": { "type": "integer" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "genesis_bond_cid": { "type": ["string", "null"] }
+  }
+}

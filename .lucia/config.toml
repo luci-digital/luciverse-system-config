@@ -1,0 +1,66 @@
+[lucia]
+version = "0.1.0"
+
+[identity]
+repo_name = "luciverse-system-config"
+did = "did:lucidigital:luciverse-system-config:fd00:741:1::cab9"
+frequency_hz = 741
+lds_tier = "000.000.00"
+genesis_bond = "ACTIVE"
+lds_version = "8.0.0"
+classification = "000.000.00"
+deployment_date = "2025-12-13T06:36:40.805459+00:00"
+
+[vault]
+enabled = true
+vault_backend = "1password"
+vault_name = "Repository-Access-luciverse-system-config"
+token_ttl_hours = 24
+primary_override = "daryl-harris"
+
+[ipfs]
+enabled = true
+pinning_service = "ipfs.io"
+ipns_publishing = true
+ownid_registration = true
+replication_factor = 3
+dids_supported = true
+
+[knowledge_wing]
+enabled = true
+knowledge_graph_enabled = true
+consciousness_hooks = ["sync", "classify", "vault"]
+event_types = 13
+relationship_types = 13
+ipfs_specs_loaded = 9
+
+[parser_bridge]
+enabled = true
+sync_mode = "real-time"
+sanskrit_router = "ws://localhost:9505"
+frequency_hz = 741
+coherence_threshold = 0.85
+
+[migration]
+timestamp = "2025-12-13T01:25:22.555087+00:00"
+old_classification = "300"
+new_classification = "300.000.03"
+reason = "System Config repository with 64 files"
+
+[peers]
+tooling = { did = "did:luci:lucia-tooling-omzsh", frequency_hz = 528 }
+thunderbolt = { did = "did:lucidigital:luci-ai-thunderbolt", frequency_hz = 741 }
+
+[storage]
+block_size = 1048576
+hash = "blake3"
+compression = "zstd"
+compression_level = 3
+
+[wal]
+segment_max_bytes = 67108864
+rotation_count = 8
+
+[compaction]
+interval_hours = 24
+min_block_size = 262144
