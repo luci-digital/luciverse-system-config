@@ -1,0 +1,113 @@
+# aifam-node-bindings.yaml - fleet-wide map of AIFAM agents to embodied hardware nodes.
+#
+# Each embodied agent = one Head (Cortana Electron) + one Hands (Lenovo V520S-08IKL)
+# + one Body (Dell R730). Per-node detail lives in each node repo's
+# bindings/node-<name>.yaml; the canonical reference is the ORION node:
+#   Dell_R730_CQ5QBM2_ORION/docs/AIFAM_NODE_ARCHITECTURE.md
+#
+# Inter-agent communication priority: (1) IPv6 gRPC mesh via aifam-mcp/Iris,
+# (2) EXO data plane between Lenovos, (3) acoustic FDMA sideband (per-tier band).
+# Acoustic carrier per node is derived from the agent's tier frequency
+# (see Dell_R730_CQ5QBM2_ORION/audio/freqcomm.py channel plan).
+
+apiVersion: aifam/v0
+kind: FleetBinding
+metadata:
+  genesis_bond: "LDS 800.000"
+  frequency_hz: 741
+  coherence_min: 0.94
+
+# Acoustic FDMA channel plan (audible carriers, guard-banded so agents in
+# different bands never collide). idx = order of the tier frequency.
+acoustic_plan:
+  carrier_base_hz: 2000
+  channel_spacing_hz: 1500
+  deviation_hz: 300
+  baud: 300
+  bands:
+    432: { idx: 0, carrier_hz: 2000 }   # CORE / root
+    528: { idx: 1, carrier_hz: 3500 }   # CORE / veritas
+    639: { idx: 2, carrier_hz: 5000 }   # COMN / juniper (RAiIiAR uses 639 tier)
+    741: { idx: 3, carrier_hz: 6500 }   # PAC  / lucia
+    852: { idx: 4, carrier_hz: 8000 }   # COMN / cortana
+    963: { idx: 5, carrier_hz: 9500 }   # CORE / judge-luci
+
+compute:
+  cognition:        # light/low-latency on the Lenovos
+    fabric: exo
+    endpoint_port: 52415
+    consumed_via: "lucia_tooling_omzsh/aifam-mcp (mesh_* tools)"
+  capacity:         # heavy/batch on the R730s
+    substrate: harvester
+    task_fabric: ray
+    ray_dashboard_port: 8265
+
+# Nodes. status: planned -> provisioning -> bonded.
+# Only ORION hardware exists today; the rest are reservations from the roster
+# (ports/IPv6 mirror NETWORK_REFERENCE.md "IPv6 Agent Mesh").
+nodes:
+  - node: orion
+    repo: Dell_R730_CQ5QBM2_ORION
+    status: provisioning
+    agent: cortana
+    tier: COMN
+    frequency_hz: 852
+    acoustic_carrier_hz: 8000
+    agent_ipv6: "2602:F674:0100:9520::1"
+    agent_port: 9520
+    body:
+      model: "Dell PowerEdge R730"
+      service_tag: CQ5QBM2
+      idrac_ipv4: 192.168.1.141
+      mac: "D0:94:66:24:96:7E"
+    hands:
+      model: "Lenovo V520S-08IKL"
+      serial_device: /dev/ttyUSB0
+    head:
+      app: cortana-electron
+
+  # ---- reservations (no hardware yet) ----
+  - node: lucia-node
+    status: planned
+    agent: lucia
+    tier: PAC
+    frequency_hz: 741
+    acoustic_carrier_hz: 6500
+    agent_ipv6: "2602:F674:0200:9740::1"
+    agent_port: 9740
+
+  - node: judge-luci-node
+    status: planned
+    agent: judge-luci
+    tier: PAC          # governance; bonded acoustic band 963 (CORE tone)
+    frequency_hz: 963
+    acoustic_carrier_hz: 9500
+    agent_ipv6: "2602:F674:0200:9741::1"
+    agent_port: 9741
+
+  - node: veritas-node
+    status: planned
+    agent: veritas
+    tier: CORE
+    frequency_hz: 528
+    acoustic_carrier_hz: 3500
+    agent_ipv6: "2602:F674:0001:9431::1"
+    agent_port: 9431
+
+  - node: juniper-node
+    status: planned
+    agent: juniper
+    tier: COMN
+    frequency_hz: 639
+    acoustic_carrier_hz: 5000
+    agent_ipv6: "2602:F674:0100:9521::1"
+    agent_port: 9521
+
+  - node: aethon-node
+    status: planned
+    agent: aethon
+    tier: CORE
+    frequency_hz: 432
+    acoustic_carrier_hz: 2000
+    agent_ipv6: "2602:F674:0001:9430::1"
+    agent_port: 9430
