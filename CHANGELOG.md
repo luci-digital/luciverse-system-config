@@ -16,6 +16,7 @@ Historical record of major changes, deployments, and cleanup operations.
 - Added peer `luci-metabase-mcp` (`did:luci:luci-metabase-mcp`, 528 Hz, LDS 700.528) to `.lucia/threads/peers.toml` and `.lucia/config.toml`.
 - Wrote `.lucia/threads` links (thread-map.json plus frequency shards, luci-vcs format) connecting the MCP server pattern, op:// secret injection, client wiring, and MCP bundle paths across luciverse-system-config, lucia_tooling_omzsh, and luci-metabase-mcp. The previous `thread-map.json` scaffold (`{version, threads}`) was empty and not loadable by luci-vcs `ThreadIndex`, so it is replaced by the loadable map format.
 - `luci-metabase-mcp` is a pattern reference, not a deployed endpoint: no compose service and no Metabase instance are declared.
+- Refreshed the `.lucia/threads` cids for `modules/scm/luci-vcs/src/bin/mcp.rs` and `modules/scm/luci-vcs/examples/mcp.json.example` after lucia_tooling_omzsh corrected their stale `core/vcs/` paths (luci-digital/lucia_tooling_omzsh#14); thread ids are unchanged and identical across the three repos.
 
 ## 2026-03 March Updates
 
