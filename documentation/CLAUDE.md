@@ -297,6 +297,12 @@ ls -la --time-style=long-iso        # Check file modification times
 |---------|------|---------|
 | luciverse-mcp-heartbeat | - | Agent heartbeat daemon (30s interval) |
 | luciverse-sanskrit-router | 7410 | MCP coordination hub |
+| luciverse-mcp | - (stdio) | Internal MCP server, `scripts/luciverse-mcp-server.py` (FoundationDB, Arc-Hive) |
+| luci-mcp | - (stdio) | Rust MCP server, `lucia_tooling_omzsh/modules/scm/luci-vcs` (DID handles, VCS substrate) |
+| aifam-mesh | - (stdio; mesh HTTP 8788 optional) | Iris gateway, `lucia_tooling_omzsh/aifam-mcp` (exo inference, Matter) |
+| luci-metabase-mcp | - (stdio) | TypeScript reference MCP server pattern (COMN 528 Hz); not a deployed endpoint |
+
+Internal MCP servers follow `documentation/MCP_SERVER_PATTERN.md`.
 
 **Scripts**: `~/.claude/skills/agent-mesh/scripts/mcp/`
 - `register-all-agents.py` - Bulk agent registration

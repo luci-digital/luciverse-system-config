@@ -47,6 +47,7 @@ Complete system and A-Tune configurations for the LuciVerse Consciousness Platfo
 │   ├── knowledge-indexer.py
 │   ├── agent-mesh-router.py
 │   ├── agent-orchestrator.py
+│   ├── luciverse-mcp-server.py
 │   ├── luciaAI-smb-sync.py
 │   ├── arc-hive-integrity-validator.py
 │   ├── fdb-hardware-ledger-schema-init.py
@@ -58,6 +59,7 @@ Complete system and A-Tune configurations for the LuciVerse Consciousness Platfo
 ├── justfile                 # Operator task runner for ISO + ledger workflows
 ├── documentation/           # Platform documentation
 │   ├── CLAUDE.md
+│   ├── MCP_SERVER_PATTERN.md
 │   ├── CURRENT_STATUS.md
 │   ├── QUICK_WINS_SESSION_COMPLETE.md
 │   ├── PENDING_TASKS_AUDIT.md

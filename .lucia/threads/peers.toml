@@ -9,3 +9,9 @@ name = "luci_AI-thunderbolt"
 did = "did:lucidigital:luci-ai-thunderbolt"
 frequency_hz = 741
 lds_tier = "700.741"
+
+[[peer]]
+name = "luci-metabase-mcp"
+did = "did:luci:luci-metabase-mcp"
+frequency_hz = 528
+lds_tier = "700.528"
