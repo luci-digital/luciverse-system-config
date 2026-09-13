@@ -3,9 +3,19 @@
 Historical record of major changes, deployments, and cleanup operations.
 
 **Current Version**: v10.0.0 (42 agents deployed + CozyStack GitOps ready)
-**Last Updated**: 2026-02-23
+**Last Updated**: 2026-09-13
 
 ---
+
+## 2026-09 September Updates
+
+### 2026-09-13: Internal MCP server pattern, register and thread luci-metabase-mcp (COMN 528 Hz)
+
+- Added `documentation/MCP_SERVER_PATTERN.md`: the rules every internal MCP server follows (SDK, stdio, stderr logging, tool naming, op:// secrets, `.lucia` identity and threads, docs, tests, CI) and the table of known servers.
+- Registered `luciverse-mcp` (`scripts/luciverse-mcp-server.py`), `luci-mcp`, `aifam-mesh`, and `luci-metabase-mcp` in `documentation/CLAUDE.md` (MCP Agent Registration) and `NETWORK_REFERENCE.md` (MCP Servers, internal, no ports).
+- Added peer `luci-metabase-mcp` (`did:luci:luci-metabase-mcp`, 528 Hz, LDS 700.528) to `.lucia/threads/peers.toml` and `.lucia/config.toml`.
+- Wrote `.lucia/threads` links (thread-map.json plus frequency shards, luci-vcs format) connecting the MCP server pattern, op:// secret injection, client wiring, and MCP bundle paths across luciverse-system-config, lucia_tooling_omzsh, and luci-metabase-mcp. The previous `thread-map.json` scaffold (`{version, threads}`) was empty and not loadable by luci-vcs `ThreadIndex`, so it is replaced by the loadable map format.
+- `luci-metabase-mcp` is a pattern reference, not a deployed endpoint: no compose service and no Metabase instance are declared.
 
 ## 2026-03 March Updates
 

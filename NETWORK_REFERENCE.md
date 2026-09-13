@@ -328,6 +328,20 @@ Examples:
 | lucia | PAC | 2602:F674:0200:9740::1 | fd00:741:1::49 | 9740 |
 | judge-luci | PAC | 2602:F674:0200:9741::1 | fd00:741:1::4A | 9741 |
 
+### MCP Servers (internal)
+
+Internal Model Context Protocol servers are launched by the client that
+attaches to them and open no listening ports (aifam-mesh may enable an
+HTTP transport on 8788, mesh-scoped only). None is exposed outside the
+mesh. Pattern: `documentation/MCP_SERVER_PATTERN.md`.
+
+| Server | Tier | Transport | Location | DID |
+|--------|------|-----------|----------|-----|
+| luciverse-mcp | PAC (741 Hz) | stdio | `scripts/luciverse-mcp-server.py` | `did:lucidigital:luciverse-system-config:fd00:741:1::cab9` |
+| luci-mcp | 528 Hz (LDS 700.528) | stdio | `lucia_tooling_omzsh/modules/scm/luci-vcs` | `did:luci:lucia-tooling-omzsh` |
+| aifam-mesh | 528 Hz (LDS 800.000) | stdio, optional HTTP 8788 | `lucia_tooling_omzsh/aifam-mcp` | `did:luci:lucia-tooling-omzsh` |
+| luci-metabase-mcp | COMN (528 Hz) | stdio | https://github.com/luci-digital/luci-metabase-mcp | `did:luci:luci-metabase-mcp` (no ULA assigned) |
+
 ### Seed Simulation Results (2025-12-24)
 - IPV6-001 ARIN Address Assignment: PASSED
 - IPV6-002 ULA Mesh Connectivity: PASSED

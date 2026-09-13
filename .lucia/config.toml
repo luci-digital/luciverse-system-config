@@ -50,6 +50,7 @@ reason = "System Config repository with 64 files"
 [peers]
 tooling = { did = "did:luci:lucia-tooling-omzsh", frequency_hz = 528 }
 thunderbolt = { did = "did:lucidigital:luci-ai-thunderbolt", frequency_hz = 741 }
+metabase_mcp = { did = "did:luci:luci-metabase-mcp", frequency_hz = 528 }
 
 [storage]
 block_size = 1048576
