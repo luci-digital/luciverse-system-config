@@ -1,18 +1,62 @@
 #!ipxe
+# ==============================================================================
+# LuciVerse Bootimus — fail-closed network boot for Dell / Supermicro
+# Genesis Bond: ACTIVE @ 741 Hz
+# ==============================================================================
+# This is the first link in the luciverse-boot-3210 provenance chain, so it is
+# FAIL-CLOSED (LP-F1 / LP-B1): no artifact is ever executed unverified.
+#
+#   iPXE (this menu) -> verify + sanboot the onboarding ISO -> luciboot.sh boot
+#   -> 3210 crypto gate -> git-DAGwood VCS -> Apptainer SIF over IPFS
+#
+# REQUIREMENTS (both are fail-closed preconditions):
+#   1. This iPXE binary MUST be built with the Genesis-Bond code-signing root:
+#        make bin/ipxe.efi   EMBED=bootimus.ipxe   TRUST=gb-codesign-ca.pem
+#        make bin/undionly.kpxe EMBED=bootimus.ipxe TRUST=gb-codesign-ca.pem
+#      Without a baked-in trust root, imgverify cannot succeed and boot is refused.
+#   2. latest.iso.sig MUST be published beside latest.iso (produced by `just iso-stage`).
+# Dell (iDRAC) and Supermicro (X-series, Redfish) both present UEFI x64 as
+# Arch:00007 and take the same ipxe.efi path (see configs/network/bootimus-pxe.conf).
+# ==============================================================================
 
 set base-url http://192.168.1.145:8000/bootimus
 
-menu LuciVerse Bootimus
-item --gap -- -------- Onboarding --------
-item iso Download the onboarding ISO
-item shell Drop to the iPXE shell
-choose --default iso --timeout 5000 target && goto ${target}
+menu LuciVerse Bootimus  --  Dell / Supermicro provisioning
+item --gap --            ------------------ Onboarding ------------------
+item boot    Verify + boot the LuciVerse onboarding ISO (luciverse-boot-3210)
+item shell   Drop to the iPXE shell (operator)
+item reboot  Reboot
+choose --default boot --timeout 10000 target && goto ${target}
 
-:iso
-echo LuciVerse onboarding artifacts are published at ${base-url}/
-echo Boot the ISO from your operator console or fetch it with curl.
-sleep 2
+# --- fail-closed verified boot ------------------------------------------------
+:boot
+echo Fetching onboarding ISO from ${base-url}/latest.iso ...
+imgfetch --name onboarding.iso ${base-url}/latest.iso || goto fetch_failed
+echo Verifying Genesis-Bond signature (fail-closed) ...
+imgverify onboarding.iso ${base-url}/latest.iso.sig || goto verify_failed
+echo Signature OK. Booting verified onboarding ISO ...
+sanboot --no-describe onboarding.iso || goto boot_failed
 goto shell
+
+# --- fail-closed exits: on ANY failure we refuse to boot ----------------------
+:fetch_failed
+echo FAIL-CLOSED: could not fetch latest.iso from ${base-url}. Refusing to boot.
+sleep 5
+goto shell
+
+:verify_failed
+echo FAIL-CLOSED: signature verification FAILED for latest.iso.
+echo Refusing to boot an unverified or tampered artifact. See operator.
+sleep 5
+goto shell
+
+:boot_failed
+echo Boot of the verified ISO failed (sanboot). Dropping to operator shell.
+sleep 5
+goto shell
+
+:reboot
+reboot
 
 :shell
 shell
