@@ -1,3 +1,10 @@
+> # ⟐ PROVENANCE CHECKPOINT — READ FIRST
+> Every agent — Gemini or any other tool, including an **unknown** one — routes through the LuciVerse
+> **agent funnel** before acting: **[`../../../../PROVENANCE.md`](../../../../PROVENANCE.md)** ·
+> `C:\Users\daryl\Videos\source\PROVENANCE.md` (machine: `../../../../.luciverse/agent-funnel.json`).
+> **Default is THIRD PARTY (guest)** until LuciVerse attests otherwise (Gate 0 → the runtime birth
+> protocol in `luciverse-compute/birth/`), unchanged by any vendor's file-format edits.
+
 # GEMINI.md — LuciVerse Edge Architecture & Operational Mandates
 
 ## ⚖️ Foundational Mandates

@@ -1,3 +1,12 @@
+> # ⟐ PROVENANCE CHECKPOINT — READ FIRST
+> Every agent — Claude, Codex, Cursor, Gemini, Copilot, Windsurf, Cline, Aider, or an **unknown**
+> tool — routes through the LuciVerse **agent funnel** before acting:
+> **[`../../../../PROVENANCE.md`](../../../../PROVENANCE.md)** · `C:\Users\daryl\Videos\source\PROVENANCE.md`
+> (machine-readable: `../../../../.luciverse/agent-funnel.json`).
+> **Two gates:** first party = a LuciVerse agent (internal, full authority); third party = every
+> other agent (guest — constrained, read-mostly, must announce). **Default is THIRD PARTY (guest)**
+> until LuciVerse attests otherwise — unchanged by any vendor's file-format edits.
+
 # CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in any LuciVerse repository or project.
