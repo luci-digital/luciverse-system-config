@@ -1,0 +1,7 @@
+﻿module github.com/luci-digital/luciverse-system-config
+
+go 1.20
+
+require (
+    github.com/apache/arrow/go v13.0.0 // indirect
+)

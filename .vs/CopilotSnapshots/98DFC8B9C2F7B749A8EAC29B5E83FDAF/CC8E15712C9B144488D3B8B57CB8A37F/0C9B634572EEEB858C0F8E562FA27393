@@ -1,0 +1,56 @@
+﻿<#
+PowerShell script to install essential Windows toolchain via winget.
+Run as Administrator:
+  Start-Process pwsh -Verb RunAs -ArgumentList '-NoProfile -ExecutionPolicy Bypass -File .\\scripts\\setup_windows_toolchain.ps1'
+
+This script is idempotent: it checks for existing commands and only installs missing ones.
+It attempts to install: Git, CMake, Go, Visual Studio Build Tools, Ninja, xmake.
+#>
+
+Set-StrictMode -Version Latest
+
+function Has-Command($name) {
+    return (Get-Command $name -ErrorAction SilentlyContinue) -ne $null
+}
+
+if (-not (Has-Command 'winget')) {
+    Write-Error "winget not found. Please install App Installer / winget from Microsoft Store and re-run this script."
+    exit 2
+}
+
+$installs = [
+    @{ Cmd = 'git'; Ids = @('Git.Git') },
+    @{ Cmd = 'cmake'; Ids = @('Kitware.CMake') },
+    @{ Cmd = 'go'; Ids = @('Go.Go') },
+    @{ Cmd = 'cl'; Ids = @('Microsoft.VisualStudio.2022.BuildTools','Microsoft.VisualStudio.2019.BuildTools') },
+    @{ Cmd = 'ninja'; Ids = @('Kitware.Ninja','ninja-build') },
+    @{ Cmd = 'xmake'; Ids = @('xmake.xmake','xmake') },
+]
+
+foreach ($pkg in $installs) {
+    $cmd = $pkg.Cmd
+    if (Has-Command $cmd) {
+        Write-Host "[OK] $cmd already available"
+        continue
+    }
+
+    $installed = $false
+    foreach ($id in $pkg.Ids) {
+        Write-Host "Attempting winget install: $id"
+        $args = @('install', '--id', $id, '-e', '--accept-source-agreements', '--accept-package-agreements')
+        $p = Start-Process -FilePath winget -ArgumentList $args -NoNewWindow -Wait -PassThru -ErrorAction SilentlyContinue
+        if ($p -and $p.ExitCode -eq 0) {
+            Write-Host "[INSTALLED] $id"
+            $installed = $true
+            break
+        } else {
+            Write-Host "[WARN] installation of $id failed or not found"
+        }
+    }
+
+    if (-not $installed) {
+        Write-Warning "Could not install $cmd automatically. Please install it manually and re-run this script."
+    }
+}
+
+Write-Host "\nDone. Open a new shell (or restart) to pick up updated PATH. If Visual Studio Build Tools was installed you may need to run the Developer Command Prompt or restart." -ForegroundColor Green

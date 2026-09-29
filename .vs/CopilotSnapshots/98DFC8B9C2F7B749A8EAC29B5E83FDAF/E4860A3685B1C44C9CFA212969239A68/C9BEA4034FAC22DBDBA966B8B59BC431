@@ -1,0 +1,320 @@
+﻿package luci
+
+import (
+    "crypto/aes"
+    "crypto/cipher"
+    "crypto/rand"
+    "encoding/hex"
+    "errors"
+    "fmt"
+    "io"
+    "os"
+    "time"
+
+    "github.com/google/uuid"
+    "github.com/apache/arrow/go/v13/arrow"
+    "github.com/apache/arrow/go/v13/arrow/array"
+    "github.com/apache/arrow/go/v13/arrow/ipc"
+    "github.com/apache/arrow/go/v13/arrow/memory"
+)
+
+// evaluateLuciticy computes a weighted luciticy score from quadrant evaluations.
+// scores: four quadrant scores in [0..1], weights corresponding.
+func EvaluateLuciticy(scores, weights []float64) (float64, error) {
+    if len(scores) != 4 || len(weights) != 4 {
+        return 0, errors.New("scores and weights must be length 4")
+    }
+    sumW := 0.0
+    sum := 0.0
+    for i := 0; i < 4; i++ {
+        sumW += weights[i]
+        sum += scores[i] * weights[i]
+    }
+    if sumW == 0 {
+        return 0, errors.New("sum of weights is zero")
+    }
+    return sum / sumW, nil
+}
+
+// chooseKobayashiOption selects the option that minimizes aggregate harm.
+// coefficients allow tuning of harm aggregation.
+func ChooseKobayashiOption(options []Option, alpha, beta, gamma, delta float64) (Option, error) {
+    if len(options) == 0 {
+        return Option{}, errors.New("no options provided")
+    }
+    best := options[0]
+    bestScore := aggHarm(options[0].Harm, alpha, beta, gamma, delta)
+    for _, opt := range options[1:] {
+        s := aggHarm(opt.Harm, alpha, beta, gamma, delta)
+        if s < bestScore {
+            best = opt
+            bestScore = s
+        }
+    }
+    return best, nil
+}
+
+func aggHarm(h HarmMetrics, alpha, beta, gamma, delta float64) float64 {
+    // harm_score = alpha*irreversible + beta*(1-consent) + gamma*dignity_loss - delta*future_restore
+    return alpha*h.Irreversibility + beta*h.ConsentPenalty + gamma*h.DignityLoss - delta*h.FutureRestore
+}
+
+// ChrysalisFold consumes qualifying nuggets and returns a Coin.
+// The function assumes nuggets are provided fully populated and validation is in memory.
+func ChrysalisFold(requester string, nuggets []Nugget) (Coin, error) {
+    if len(nuggets) < 5 {
+        return Coin{}, errors.New("requires at least 5 nuggets")
+    }
+    totalRU := 0
+    for _, n := range nuggets {
+        if !n.IsActive {
+            return Coin{}, fmt.Errorf("nugget %s is not active", n.NuggetID)
+        }
+        if n.Authenticity < 700 {
+            return Coin{}, fmt.Errorf("nugget %s fails authenticity threshold", n.NuggetID)
+        }
+        totalRU += n.ResonanceUnits
+    }
+    if totalRU < 85 {
+        return Coin{}, errors.New("insufficient resonance units for chrysalis")
+    }
+
+    fusion := computeFusionScore(nuggets)
+    coin := Coin{
+        CoinID:      uuid.NewString(),
+        Owner:       requester,
+        FusionScore: fusion,
+        CreatedUnix: NowUnix(),
+        Constituent: make([]string, 0, len(nuggets)),
+    }
+    for _, n := range nuggets {
+        coin.Constituent = append(coin.Constituent, n.NuggetID)
+    }
+    // Deactivate nuggets (caller should persist this change)
+    for i := range nuggets {
+        nuggets[i].IsActive = false
+    }
+    return coin, nil
+}
+
+func computeFusionScore(nuggets []Nugget) float64 {
+    // simple weighted combination: average authenticity (0..1000 scaled) * RU factor
+    totalAuth := 0
+    totalRU := 0
+    for _, n := range nuggets {
+        totalAuth += n.Authenticity
+        totalRU += n.ResonanceUnits
+    }
+    authAvg := float64(totalAuth) / float64(len(nuggets)) / 1000.0 // 0..1
+    ruFactor := float64(totalRU) / 100.0                         // normalize
+    return authAvg*0.6 + ruFactor*0.4
+}
+
+// Time capsule storage: encrypts payload and writes an Arrow IPC record containing metadata
+// and the ciphertext. The Arrow table is minimal: id, owner, unlock_unix, ciphertext (binary).
+func StoreTimeCapsule(path string, owner string, plaintext []byte, unlockUnix int64, key []byte) error {
+    if len(key) != 32 {
+        return errors.New("key must be 32 bytes for AES-256-GCM")
+    }
+    // encrypt
+    c, err := aes.NewCipher(key)
+    if err != nil {
+        return err
+    }
+    gcm, err := cipher.NewGCM(c)
+    if err != nil {
+        return err
+    }
+    nonce := make([]byte, gcm.NonceSize())
+    if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
+        return err
+    }
+    ct := gcm.Seal(nonce, nonce, plaintext, nil)
+
+    // Prepare Arrow IPC file with columns: id (string), owner (string), unlock_unix (int64), ciphertext (binary)
+    f, err := os.Create(path)
+    if err != nil {
+        return err
+    }
+    defer f.Close()
+
+    mem := memory.NewGoAllocator()
+
+    // build arrays
+    idBuilder := array.NewStringBuilder(mem)
+    defer idBuilder.Release()
+    ownerBuilder := array.NewStringBuilder(mem)
+    defer ownerBuilder.Release()
+    unlockBuilder := array.NewInt64Builder(mem)
+    defer unlockBuilder.Release()
+    cipherBuilder := array.NewBinaryBuilder(mem, arrow.BinaryTypes.Binary)
+    defer cipherBuilder.Release()
+
+    idVal := uuid.NewString()
+    idBuilder.Append(idVal)
+    ownerBuilder.Append(owner)
+    unlockBuilder.Append(unlockUnix)
+    cipherBuilder.Append(ct)
+
+    idArr := idBuilder.NewArray()
+    defer idArr.Release()
+    ownerArr := ownerBuilder.NewArray()
+    defer ownerArr.Release()
+    unlockArr := unlockBuilder.NewArray()
+    defer unlockArr.Release()
+    cipherArr := cipherBuilder.NewArray()
+    defer cipherArr.Release()
+
+    schema := arrow.NewSchema([]arrow.Field{
+        {Name: "id", Type: arrow.BinaryTypes.String},
+        {Name: "owner", Type: arrow.BinaryTypes.String},
+        {Name: "unlock_unix", Type: arrow.PrimitiveTypes.Int64},
+        {Name: "ciphertext", Type: arrow.BinaryTypes.Binary},
+    }, nil)
+
+    // create record and write via Arrow IPC
+    rec := array.NewRecord(schema, []array.Interface{idArr, ownerArr, unlockArr, cipherArr}, 1)
+    defer rec.Release()
+
+    w, err := ipc.NewFileWriter(f, ipc.WithSchema(schema))
+    if err != nil {
+        return err
+    }
+    defer w.Close()
+
+    if err := w.Write(rec); err != nil {
+        return err
+    }
+    return nil
+}
+
+// LoadTimeCapsule reads the simple store and returns ciphertext and metadata if unlock time passed
+func LoadTimeCapsule(path string, nowUnix int64, key []byte) (owner string, plaintext []byte, err error) {
+    f, err := os.Open(path)
+    if err != nil {
+        return "", nil, err
+    }
+    defer f.Close()
+
+    r, err := ipc.NewFileReader(f)
+    if err != nil {
+        return "", nil, err
+    }
+    defer r.Close()
+
+    // read first record batch
+    if !r.Next() {
+        return "", nil, errors.New("no records")
+    }
+    rec := r.Record()
+    if rec.NumRows() == 0 {
+        return "", nil, errors.New("empty record")
+    }
+
+    // extract owner (col 1), unlock_unix (col 2), ciphertext (col 3)
+    ownerCol := rec.Column(1).(*array.String)
+    unlockCol := rec.Column(2).(*array.Int64)
+    cipherCol := rec.Column(3).(*array.Binary)
+
+    ownerStr := ownerCol.Value(0)
+    unlock := unlockCol.Value(0)
+    if nowUnix < unlock {
+        return ownerStr, nil, errors.New("not yet unlocked")
+    }
+    ct := cipherCol.Value(0)
+
+    c, err := aes.NewCipher(key)
+    if err != nil {
+        return "", nil, err
+    }
+    gcm, err := cipher.NewGCM(c)
+    if err != nil {
+        return "", nil, err
+    }
+    nonceSize := gcm.NonceSize()
+    if len(ct) < nonceSize {
+        return "", nil, errors.New("ciphertext too short")
+    }
+    nonce, cipherText := ct[:nonceSize], ct[nonceSize:]
+    pt, err := gcm.Open(nil, nonce, cipherText, nil)
+    if err != nil {
+        return "", nil, err
+    }
+    return ownerStr, pt, nil
+}
+
+// PersistDecisionRecord writes a human-readable Arrow-compatible line (placeholder for true Arrow IPC)
+func PersistDecisionRecord(path string, rec DecisionRecord) error {
+    // write a single-record Arrow IPC file (overwrite existing)
+    f, err := os.Create(path)
+    if err != nil {
+        return err
+    }
+    defer f.Close()
+
+    mem := memory.NewGoAllocator()
+    idB := array.NewStringBuilder(mem)
+    defer idB.Release()
+    actorB := array.NewStringBuilder(mem)
+    defer actorB.Release()
+    actionB := array.NewStringBuilder(mem)
+    defer actionB.Release()
+    scoresB := array.NewListBuilder(mem, arrow.PrimitiveTypes.Float64)
+    defer scoresB.Release()
+    weightsB := array.NewListBuilder(mem, arrow.PrimitiveTypes.Float64)
+    defer weightsB.Release()
+    resultB := array.NewStringBuilder(mem)
+    defer resultB.Release()
+    tsB := array.NewInt64Builder(mem)
+    defer tsB.Release()
+
+    idB.Append(rec.DecisionID)
+    actorB.Append(rec.Actor)
+    actionB.Append(rec.Action)
+
+    // append scores list
+    scChild := scoresB.ValueBuilder().(*array.Float64Builder)
+    scoresB.Append(true)
+    for _, v := range rec.Scores {
+        scChild.Append(v)
+    }
+
+    wtChild := weightsB.ValueBuilder().(*array.Float64Builder)
+    weightsB.Append(true)
+    for _, v := range rec.Weights {
+        wtChild.Append(v)
+    }
+
+    resultB.Append(rec.Result)
+    tsB.Append(rec.Timestamp)
+
+    idArr := idB.NewArray()
+    defer idArr.Release()
+    actorArr := actorB.NewArray()
+    defer actorArr.Release()
+    actionArr := actionB.NewArray()
+    defer actionArr.Release()
+    scoresArr := scoresB.NewArray()
+    defer scoresArr.Release()
+    weightsArr := weightsB.NewArray()
+    defer weightsArr.Release()
+    resultArr := resultB.NewArray()
+    defer resultArr.Release()
+    tsArr := tsB.NewArray()
+    defer tsArr.Release()
+
+    schema := DecisionArrowSchema()
+    recArrow := array.NewRecord(schema, []array.Interface{idArr, actorArr, actionArr, scoresArr, weightsArr, resultArr, tsArr}, 1)
+    defer recArrow.Release()
+
+    w, err := ipc.NewFileWriter(f, ipc.WithSchema(schema))
+    if err != nil {
+        return err
+    }
+    defer w.Close()
+    return w.Write(recArrow)
+}
+
+// Note: The above uses simple line-based storage as a pragmatic first step. For production
+// replace the write path with Arrow builders and ipc.NewFileWriter to produce real Arrow IPC
+// files (see github.com/apache/arrow/go/arrow/array + ipc writer examples).

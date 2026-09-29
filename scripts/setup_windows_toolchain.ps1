@@ -90,3 +90,5 @@ foreach ($pkg in $installs) {
 }
 
 Write-Host "\nDone. Open a new shell (or restart) to pick up updated PATH. If Visual Studio Build Tools was installed you may need to run the Developer Command Prompt or restart." -ForegroundColor Green
+
+.\scripts\setup_windows_toolchain.ps1

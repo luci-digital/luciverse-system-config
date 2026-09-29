@@ -1,0 +1,29 @@
+// AVX2 implementation using Intel intrinsics
+#include <stddef.h>
+#include <string.h>
+#include <immintrin.h>
+
+void compute_impl(const float *in, float *out, int n) {
+    if (n <= 0) return;
+
+    int i = 0;
+    __m256 sumv = _mm256_setzero_ps();
+
+    // process 8 floats at a time
+    for (; i + 7 < n; i += 8) {
+        __m256 v = _mm256_loadu_ps(in + i);
+        sumv = _mm256_add_ps(sumv, v);
+    }
+
+    // horizontal sum of sumv
+    float tmp[8] __attribute__((aligned(32)));
+    _mm256_store_ps(tmp, sumv);
+    float s = tmp[0] + tmp[1] + tmp[2] + tmp[3] + tmp[4] + tmp[5] + tmp[6] + tmp[7];
+
+    // tail
+    for (; i < n; ++i) s += in[i];
+
+    // zero output buffer then set first element to sum
+    memset(out, 0, n * sizeof(float));
+    out[0] = s;
+}

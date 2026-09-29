@@ -1,0 +1,104 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <libgen.h>
+#include <limits.h>
+#include <errno.h>
+
+#if defined(__x86_64__) || defined(_M_X64)
+#include <cpuid.h>
+#endif
+
+static int has_xsave() {
+#if defined(__x86_64__) || defined(_M_X64)
+    unsigned int a, b, c, d;
+    if (!__get_cpuid(1, &a, &b, &c, &d)) return 0;
+    return (c & (1u<<27)) != 0; // OSXSAVE
+#else
+    return 0;
+#endif
+}
+
+static int supports_avx2() {
+#if defined(__x86_64__) || defined(_M_X64)
+    return __builtin_cpu_supports("avx2");
+#else
+    return 0;
+#endif
+}
+
+static int supports_avx512() {
+#if defined(__x86_64__) || defined(_M_X64)
+    return __builtin_cpu_supports("avx512f");
+#else
+    return 0;
+#endif
+}
+
+// construct path: basedir + "/%s/%s"
+static char *join_path(const char *basedir, const char *subdir, const char *file) {
+    size_t len = strlen(basedir) + 1 + strlen(subdir) + 1 + strlen(file) + 1;
+    char *buf = malloc(len);
+    if (!buf) return NULL;
+    snprintf(buf, len, "%s/%s/%s", basedir, subdir, file);
+    return buf;
+}
+
+int main(int argc, char **argv) {
+    (void)argc;
+    // determine base directory of this executable
+    char exe_path[PATH_MAX];
+    ssize_t r = readlink("/proc/self/exe", exe_path, sizeof(exe_path)-1);
+    char *basedir = NULL;
+    if (r != -1) {
+        exe_path[r] = '\0';
+        char *dir = dirname(exe_path);
+        basedir = strdup(dir);
+    } else {
+        // fallback to current working directory
+        char cwd[PATH_MAX];
+        if (getcwd(cwd, sizeof(cwd))) basedir = strdup(cwd);
+        else basedir = strdup(".");
+    }
+
+    // candidate order: avx512, avx2, scalar
+    const char *subdirs[] = {"avx512", "avx2", "scalar"};
+    const char *bins[] = {"luciverse_avx512", "luciverse_avx2", "luciverse_scalar"};
+
+    int choose = -1;
+    if (supports_avx512() && has_xsave()) choose = 0;
+    else if (supports_avx2() && has_xsave()) choose = 1;
+    else choose = 2;
+
+    char *target = NULL;
+    if (choose >= 0) {
+        target = join_path(basedir, subdirs[choose], bins[choose]);
+    }
+
+    if (!target) {
+        fprintf(stderr, "Unable to determine target binary\n");
+        free(basedir);
+        return 1;
+    }
+
+    // exec the selected binary, passing through argv
+    char **newargv = malloc((argc + 1) * sizeof(char*));
+    if (!newargv) {
+        perror("malloc");
+        free(target);
+        free(basedir);
+        return 1;
+    }
+    newargv[0] = target;
+    for (int i = 1; i < argc; ++i) newargv[i] = argv[i];
+    newargv[argc] = NULL;
+
+    execv(target, newargv);
+    // if execv returns, error
+    fprintf(stderr, "failed to exec %s: %s\n", target, strerror(errno));
+    free(newargv);
+    free(target);
+    free(basedir);
+    return 1;
+}
