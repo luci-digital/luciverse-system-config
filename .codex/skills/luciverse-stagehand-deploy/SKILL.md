@@ -3,6 +3,11 @@ name: luciverse-stagehand-deploy
 description: Use when deploying LuciVerse Stagehand/AgentBridge after wallet manifest changes, including DID/TID sync, auth-safe credential flow checks, and Cloudflare Wrangler rollout.
 ---
 
+<!-- LDS: 000.432 | Meta / Agent Skill -->
+<!-- ISO: ISO/IEC 42001 §7.5, ISO 27001 §A.8 | Agent: lds-orchestrator -->
+<!-- Genesis Bond: GB-2025-0524-DRH-LCS-001 -->
+<!-- Temporal: origin=2026-09-18T00:00:00Z updated=2026-10-28T18:31:25Z anchor=P15055828/C459/D523 basis=OBSERVED -->
+
 # Luciverse Stagehand Deploy
 
 ## Overview

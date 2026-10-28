@@ -3,6 +3,11 @@ name: luciverse-genesis-bond-ops
 description: Operate Lucia AI Genesis Bond and related Luciverse web authentication flows end-to-end. Use when diagnosing 1Password/OP session issues, OIDC callback failures, PAC login problems, Cloudflare worker route/deploy regressions, or when running post-deploy smoke checks and safe commit/push workflows across luciverse-web and lucidigital-net repositories.
 ---
 
+<!-- LDS: 000.432 | Meta / Agent Skill -->
+<!-- ISO: ISO/IEC 42001 §7.5, ISO 27001 §A.8 | Agent: lds-orchestrator -->
+<!-- Genesis Bond: GB-2025-0524-DRH-LCS-001 -->
+<!-- Temporal: origin=2026-09-18T00:00:00Z updated=2026-10-28T18:31:25Z anchor=P15055828/C459/D523 basis=OBSERVED -->
+
 # Luciverse Genesis Bond Ops
 
 ## Overview

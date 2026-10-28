@@ -3,6 +3,11 @@ name: luciverse-identity-orchestrator
 description: Implement and operate LuciVerse identity orchestration across SSI-OIDC bridge code, DID/TID compatibility, 1Password credential automation, and policy-gated adapter routes. Use when tasks involve auth bridge changes in auth/ssi_oidc_bridge.py, DID alias/canonical migration, OP secret read/create flows, adapter contract endpoints, or cross-repo identity plumbing between lucios and luciverse-sovereign-orchestrator.
 ---
 
+<!-- LDS: 000.432 | Meta / Agent Skill -->
+<!-- ISO: ISO/IEC 42001 §7.5, ISO 27001 §A.8 | Agent: lds-orchestrator -->
+<!-- Genesis Bond: GB-2025-0524-DRH-LCS-001 -->
+<!-- Temporal: origin=2026-09-18T00:00:00Z updated=2026-10-28T18:31:25Z anchor=P15055828/C459/D523 basis=OBSERVED -->
+
 # Luciverse Identity Orchestrator
 
 ## Quick Start
